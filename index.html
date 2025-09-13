@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eorzea Vista Oracle</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/compact-table.css" rel="stylesheet">
+    <script defer src="js/alpine.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/eorzean-weather-data.js"></script>
+    <script src="js/eorzean-vista-calculator.js"></script>
+</head>
+<body>
+    <main x-data="{
+        localTime: formatLocalTime(Date.now()),
+        eorzeaTime: formatEorzeanTime(Date.now()),
+        zones: Object.values(window.Zone),
+        windowStarts: getWeatherWindowStarts(Date.now() / 1000, 10),
+        updateTimes() {
+            const now = Date.now() / 1000;
+            this.localTime = formatLocalTime(now);
+            this.eorzeaTime = formatEorzeanTime(now);
+            this.windowStarts = getWeatherWindowStarts(now, 10);
+        }
+    }"
+    x-init="setInterval(() => { updateTimes() }, 1000)">
+        <div class="container">
+            <h1>Welcome to the Eorzea Vista Oracle</h1>
+            <p>Start building your application here.</p>
+        </div>
+        <div class="container">
+            <h2>Current Time</h2>
+            <p>
+                <span class="badge text-bg-secondary" data-bs-toggle="tooltip" data-bs-title="Eorzea Time">ET</span> <span x-text="eorzeaTime"></span>
+                <span class="badge text-bg-secondary" data-bs-toggle="tooltip" data-bs-title="Local Time">LT</span> <span x-text="localTime"></span>
+            </p>
+        </div>
+        <div class="container">
+            <h2>Weather forecast</h2>
+            <table class='table table-bordered w-auto'>
+                <thead>
+                    <tr>
+                        <th>Zone</th>
+                        <template x-for="(windowStart, n) in windowStarts" :key="windowStart">
+                            <th class="text-nowrap fixed-col">
+                                <span class="badge text-bg-secondary" data-bs-toggle="tooltip" data-bs-title="Eorzea Time">ET</span>
+                                <span x-text="formatEorzeanTime(windowStart)"></span><br>
+                                <span class="badge text-bg-secondary" data-bs-toggle="tooltip" data-bs-title="Local Time">LT</span>
+                                <span x-text="formatLocalTime(windowStart)"></span>
+                            </th>
+                        </template>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template x-for="zone in zones" :key="zone.name">
+                        <tr>
+                            <td x-text="zone.name"></td>
+                            <template x-for="windowStart in windowStarts" :key="windowStart">
+                                <td x-data="{ forecast: getWeatherForecast(zone.name, windowStart) }" class="small fixed-col">
+                                    <div class="d-flex flex-column align-items-center justify-content-center">
+                                        <img :src="forecast.image" :alt="forecast.weather" style="width:32px;height:32px;" class="mb-1">
+                                        <span x-html="forecast.weather" class="d-block text-center break-word"></span>
+                                    </div>
+                                </td>
+                            </template>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </div>
+    </main>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle=\"tooltip\"]'));
+        tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+            new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    });
+</script>
+</body>
+</html>
