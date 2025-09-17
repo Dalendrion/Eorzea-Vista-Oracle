@@ -137,11 +137,11 @@ function getWeatherForecast(areaName, unixSeconds) {
 
 /**
  * Get all zones in the given regions.
- * @param {string[]} regions - List of region constants (e.g., [Region.COERTHAS, Region.DRAVANIA]).
+ * @param {string} region - The name of a region (e.g., Region.COERTHAS or Region.DRAVANIA).
  * @returns {object[]} List of matching Zone objects.
  */
-function getZonesByRegions(regions) {
-    return Object.values(Zone).filter(zone => regions.includes(zone.region));
+function getZonesByRegion(region) {
+    return Object.values(Zone).filter(zone => region === zone.region);
 }
 
 /**
@@ -154,3 +154,4 @@ function getZonesByExpansions(expansions) {
 }
 
 window.getWeatherForecast = getWeatherForecast
+window.getZonesByRegion = getZonesByRegion
