@@ -33,7 +33,6 @@ var Region = {
     HINGASHI: "Hingashi",
     THE_FORBIDDEN_LAND_EUREKA: "The Forbidden Land, Eureka",
     NORVRANDT: "Norvrandt",
-    THE_HIGH_SEAS: "The High Seas",
     THE_NORTHERN_EMPTY: "The Northern Empty",
     ILSABARD: "Ilsabard",
     THE_SEA_OF_STARS: "The Sea of Stars",
