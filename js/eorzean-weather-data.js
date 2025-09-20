@@ -463,7 +463,7 @@ var Zone = {
 var Vista = [{
     number: "1",
     name: "Barracuda Piers",
-    area: Area.LIMSA_LOMINSA_UPPER_DECKS,
+    area: Zone.LIMSA_LOMINSA_UPPER_DECKS,
     zone: "Limsa Lominsa Upper Decks",
     coordinates: { x: 9.5, y: 7.8 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -473,7 +473,7 @@ var Vista = [{
 },{
     number: "2",
     name: "The Astalicia",
-    area: Area.LIMSA_LOMINSA_LOWER_DECKS,
+    area: Zone.LIMSA_LOMINSA_LOWER_DECKS,
     zone: "Limsa Lominsa Lower Decks",
     coordinates: { x: 7.1, y: 15.1 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -483,7 +483,7 @@ var Vista = [{
 },{
     number: "3",
     name: "Seasong Grotto",
-    area: Area.MIDDLE_LA_NOSCEA,
+    area: Zone.MIDDLE_LA_NOSCEA,
     zone: "Middle La Noscea",
     coordinates: { x: 20.3, y: 19.1 },
     weather: [ Weather.RAIN, Weather.SHOWERS ],
@@ -493,7 +493,7 @@ var Vista = [{
 },{
     number: "4",
     name: "The Skylift",
-    area: Area.MIDDLE_LA_NOSCEA,
+    area: Zone.MIDDLE_LA_NOSCEA,
     zone: "Middle La Noscea",
     coordinates: { x: 16.0, y: 17.3 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -503,7 +503,7 @@ var Vista = [{
 },{
     number: "5",
     name: "La Thagran Eastroad",
-    area: Area.MIDDLE_LA_NOSCEA,
+    area: Zone.MIDDLE_LA_NOSCEA,
     zone: "Middle La Noscea",
     coordinates: { x: 25.3, y: 27.5 },
     weather: [ Weather.CLOUDS ],
@@ -513,7 +513,7 @@ var Vista = [{
 },{
     number: "6",
     name: "The Salt Strand",
-    area: Area.LOWER_LA_NOSCEA,
+    area: Zone.LOWER_LA_NOSCEA,
     zone: "Lower La Noscea",
     coordinates: { x: 23.1, y: 40.2 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -523,7 +523,7 @@ var Vista = [{
 },{
     number: "7",
     name: "Red Rooster Stead",
-    area: Area.LOWER_LA_NOSCEA,
+    area: Zone.LOWER_LA_NOSCEA,
     zone: "Lower La Noscea",
     coordinates: { x: 33.5, y: 19.3 },
     weather: [ Weather.FOG ],
@@ -533,7 +533,7 @@ var Vista = [{
 },{
     number: "8",
     name: "Brewer's Beacon",
-    area: Area.WESTERN_LA_NOSCEA,
+    area: Zone.WESTERN_LA_NOSCEA,
     zone: "Western La Noscea",
     coordinates: { x: 29.9, y: 30.7 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -543,7 +543,7 @@ var Vista = [{
 },{
     number: "9",
     name: "The Leatherworkers' Guild",
-    area: Area.OLD_GRIDANIA,
+    area: Zone.OLD_GRIDANIA,
     zone: "Old Gridania",
     coordinates: { x: 12.8, y: 7.8 },
     weather: [ Weather.CLOUDS ],
@@ -553,7 +553,7 @@ var Vista = [{
 },{
     number: "10",
     name: "Apkallu Falls",
-    area: Area.OLD_GRIDANIA,
+    area: Zone.OLD_GRIDANIA,
     zone: "Old Gridania",
     coordinates: { x: 10.8, y: 6.4 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -563,7 +563,7 @@ var Vista = [{
 },{
     number: "11",
     name: "Bentbranch Meadows",
-    area: Area.CENTRAL_SHROUD,
+    area: Zone.CENTRAL_SHROUD,
     zone: "Central Shroud",
     coordinates: { x: 21.8, y: 21.8 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -573,7 +573,7 @@ var Vista = [{
 },{
     number: "12",
     name: "The Sanctum of the Twelve",
-    area: Area.EAST_SHROUD,
+    area: Zone.EAST_SHROUD,
     zone: "East Shroud",
     coordinates: { x: 17.6, y: 18.2 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -583,7 +583,7 @@ var Vista = [{
 },{
     number: "13",
     name: "Little Solace",
-    area: Area.EAST_SHROUD,
+    area: Zone.EAST_SHROUD,
     zone: "East Shroud",
     coordinates: { x: 22.3, y: 26.2 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -593,7 +593,7 @@ var Vista = [{
 },{
     number: "14",
     name: "Royal Promenade",
-    area: Area.ULDAH__STEPS_OF_THAL,
+    area: Zone.ULDAH__STEPS_OF_THAL,
     zone: "Ul'dah - Steps of Thal",
     coordinates: { x: 11.1, y: 11.6 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -603,7 +603,7 @@ var Vista = [{
 },{
     number: "15",
     name: "The Gold Court",
-    area: Area.ULDAH__STEPS_OF_THAL,
+    area: Zone.ULDAH__STEPS_OF_THAL,
     zone: "Ul'dah - Steps of Thal",
     coordinates: { x: 11.5, y: 11.2 },
     weather: [ Weather.CLOUDS ],
@@ -613,7 +613,7 @@ var Vista = [{
 },{
     number: "16",
     name: "The Jewel of the Desert",
-    area: Area.WESTERN_THANALAN,
+    area: Zone.WESTERN_THANALAN,
     zone: "Western Thanalan",
     coordinates: { x: 22.3, y: 22.3 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -623,7 +623,7 @@ var Vista = [{
 },{
     number: "17",
     name: "The Ruins of Sil'dih",
-    area: Area.CENTRAL_THANALAN,
+    area: Zone.CENTRAL_THANALAN,
     zone: "Central Thanalan",
     coordinates: { x: 15.9, y: 22.9 },
     weather: [ Weather.FOG ],
@@ -633,7 +633,7 @@ var Vista = [{
 },{
     number: "18",
     name: "The Lonely Giant",
-    area: Area.EASTERN_THANALAN,
+    area: Zone.EASTERN_THANALAN,
     zone: "Eastern Thanalan",
     coordinates: { x: 19.5, y: 24.7 },
     weather: [ Weather.RAIN, Weather.SHOWERS ],
@@ -643,7 +643,7 @@ var Vista = [{
 },{
     number: "19",
     name: "The Invisible City",
-    area: Area.EASTERN_THANALAN,
+    area: Zone.EASTERN_THANALAN,
     zone: "Eastern Thanalan",
     coordinates: { x: 14.3, y: 18.5 },
     weather: [ Weather.CLOUDS ],
@@ -653,7 +653,7 @@ var Vista = [{
 },{
     number: "20",
     name: "Highbridge",
-    area: Area.EASTERN_THANALAN,
+    area: Zone.EASTERN_THANALAN,
     zone: "Eastern Thanalan",
     coordinates: { x: 21.0, y: 20.7 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -663,7 +663,7 @@ var Vista = [{
 },{
     number: "21",
     name: "Woad Whisper Canyon",
-    area: Area.MIDDLE_LA_NOSCEA,
+    area: Zone.MIDDLE_LA_NOSCEA,
     zone: "Middle La Noscea",
     coordinates: { x: 20.0, y: 13.1 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -673,7 +673,7 @@ var Vista = [{
 },{
     number: "22",
     name: "Summerford Farms",
-    area: Area.MIDDLE_LA_NOSCEA,
+    area: Zone.MIDDLE_LA_NOSCEA,
     zone: "Middle La Noscea",
     coordinates: { x: 25.7, y: 17 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -683,7 +683,7 @@ var Vista = [{
 },{
     number: "23",
     name: "The Grey Fleet",
-    area: Area.LOWER_LA_NOSCEA,
+    area: Zone.LOWER_LA_NOSCEA,
     zone: "Lower La Noscea",
     coordinates: { x: 31.5, y: 12.7 },
     weather: [ Weather.RAIN, Weather.SHOWERS ],
@@ -693,7 +693,7 @@ var Vista = [{
 },{
     number: "24",
     name: "Hidden Falls",
-    area: Area.EASTERN_LA_NOSCEA,
+    area: Zone.EASTERN_LA_NOSCEA,
     zone: "Eastern La Noscea",
     coordinates: { x: 32.6, y: 23.5 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -703,7 +703,7 @@ var Vista = [{
 },{
     number: "25",
     name: "Gullperch Tower",
-    area: Area.EASTERN_LA_NOSCEA,
+    area: Zone.EASTERN_LA_NOSCEA,
     zone: "Eastern La Noscea",
     coordinates: { x: 29.6, y: 33.8 },
     weather: [ Weather.RAIN, Weather.SHOWERS ],
@@ -713,7 +713,7 @@ var Vista = [{
 },{
     number: "26",
     name: "The Navigator",
-    area: Area.WESTERN_LA_NOSCEA,
+    area: Zone.WESTERN_LA_NOSCEA,
     zone: "Western La Noscea",
     coordinates: { x: 26.9, y: 26.6 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -723,7 +723,7 @@ var Vista = [{
 },{
     number: "27",
     name: "The Ship Graveyard",
-    area: Area.WESTERN_LA_NOSCEA,
+    area: Zone.WESTERN_LA_NOSCEA,
     zone: "Western La Noscea",
     coordinates: { x: 17.1, y: 36.2 },
     weather: [ Weather.GALES ],
@@ -733,7 +733,7 @@ var Vista = [{
 },{
     number: "28",
     name: "Camp Skull Valley",
-    area: Area.WESTERN_LA_NOSCEA,
+    area: Zone.WESTERN_LA_NOSCEA,
     zone: "Western La Noscea",
     coordinates: { x: 22.8, y: 22.4 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -743,7 +743,7 @@ var Vista = [{
 },{
     number: "29",
     name: "Tidegate",
-    area: Area.WESTERN_LA_NOSCEA,
+    area: Zone.WESTERN_LA_NOSCEA,
     zone: "Western La Noscea",
     coordinates: { x: 19.4, y: 22.4 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -753,7 +753,7 @@ var Vista = [{
 },{
     number: "30",
     name: "Camp Bronze Lake",
-    area: Area.UPPER_LA_NOSCEA,
+    area: Zone.UPPER_LA_NOSCEA,
     zone: "Upper La Noscea",
     coordinates: { x: 30.8, y: 22.4 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -763,7 +763,7 @@ var Vista = [{
 },{
     number: "31",
     name: "Thalaos",
-    area: Area.UPPER_LA_NOSCEA,
+    area: Zone.UPPER_LA_NOSCEA,
     zone: "Upper La Noscea",
     coordinates: { x: 12.9, y: 22.0 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -773,7 +773,7 @@ var Vista = [{
 },{
     number: "32",
     name: "Jijiroon's Trading Post",
-    area: Area.UPPER_LA_NOSCEA,
+    area: Zone.UPPER_LA_NOSCEA,
     zone: "Upper La Noscea",
     coordinates: { x: 29.1, y: 25.4 },
     weather: [ Weather.THUNDERSTORMS ],
@@ -783,7 +783,7 @@ var Vista = [{
 },{
     number: "33",
     name: "The Floating City of Nym",
-    area: Area.OUTER_LA_NOSCEA,
+    area: Zone.OUTER_LA_NOSCEA,
     zone: "Outer La Noscea",
     coordinates: { x: 12.7, y: 15.1 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -793,7 +793,7 @@ var Vista = [{
 },{
     number: "34",
     name: "Camp Overlook",
-    area: Area.OUTER_LA_NOSCEA,
+    area: Zone.OUTER_LA_NOSCEA,
     zone: "Outer La Noscea",
     coordinates: { x: 17.1, y: 16.3, z: 0.8 },
     weather: [ Weather.CLOUDS ],
@@ -803,7 +803,7 @@ var Vista = [{
 },{
     number: "35",
     name: "U'Ghamaro Mines",
-    area: Area.OUTER_LA_NOSCEA,
+    area: Zone.OUTER_LA_NOSCEA,
     zone: "Outer La Noscea",
     coordinates: { x: 23.4, y: 11.7, z: 0.7 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -813,7 +813,7 @@ var Vista = [{
 },{
     number: "36",
     name: "The Hermit's Hovel",
-    area: Area.OUTER_LA_NOSCEA,
+    area: Zone.OUTER_LA_NOSCEA,
     zone: "Outer La Noscea",
     coordinates: { x: 15.4, y: 10.1 },
     weather: [ Weather.RAIN, Weather.SHOWERS ],
@@ -823,7 +823,7 @@ var Vista = [{
 },{
     number: "37",
     name: "The Carline Canopy",
-    area: Area.NEW_GRIDANIA,
+    area: Zone.NEW_GRIDANIA,
     zone: "New Gridania",
     coordinates: { x: 14.3, y: 14.3 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -833,7 +833,7 @@ var Vista = [{
 },{
     number: "38",
     name: "The Lancer's Guild",
-    area: Area.OLD_GRIDANIA,
+    area: Zone.OLD_GRIDANIA,
     zone: "Old Gridania",
     coordinates: { x: 14.2, y: 5.9 },
     weather: [ Weather.RAIN, Weather.SHOWERS ],
@@ -843,7 +843,7 @@ var Vista = [{
 },{
     number: "39",
     name: "The Bannock",
-    area: Area.CENTRAL_SHROUD,
+    area: Zone.CENTRAL_SHROUD,
     zone: "Central Shroud",
     coordinates: { x: 23.4, y: 19.9 },
     weather: [ Weather.RAIN, Weather.SHOWERS ],
@@ -853,7 +853,7 @@ var Vista = [{
 },{
     number: "40",
     name: "Haukke Manor",
-    area: Area.CENTRAL_SHROUD,
+    area: Zone.CENTRAL_SHROUD,
     zone: "Central Shroud",
     coordinates: { x: 13.6, y: 23.1 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -863,7 +863,7 @@ var Vista = [{
 },{
     number: "41",
     name: "The Guardian Tree",
-    area: Area.CENTRAL_SHROUD,
+    area: Zone.CENTRAL_SHROUD,
     zone: "Central Shroud",
     coordinates: { x: 16.3, y: 22.3 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -873,7 +873,7 @@ var Vista = [{
 },{
     number: "42",
     name: "Rainbow Bridge",
-    area: Area.CENTRAL_SHROUD,
+    area: Zone.CENTRAL_SHROUD,
     zone: "Central Shroud",
     coordinates: { x: 26.5, y: 18.8 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -883,7 +883,7 @@ var Vista = [{
 },{
     number: "43",
     name: "The Seedbed",
-    area: Area.EAST_SHROUD,
+    area: Zone.EAST_SHROUD,
     zone: "East Shroud",
     coordinates: { x: 20.9, y: 10.7 },
     weather: [ Weather.THUNDER ],
@@ -893,7 +893,7 @@ var Vista = [{
 },{
     number: "44",
     name: "Buscarron's Druthers",
-    area: Area.SOUTH_SHROUD,
+    area: Zone.SOUTH_SHROUD,
     zone: "South Shroud",
     coordinates: { x: 17.8, y: 20.1 },
     weather: [ Weather.THUNDERSTORMS ],
@@ -903,7 +903,7 @@ var Vista = [{
 },{
     number: "45",
     name: "South Shroud Landing",
-    area: Area.SOUTH_SHROUD,
+    area: Zone.SOUTH_SHROUD,
     zone: "South Shroud",
     coordinates: { x: 14.7, y: 33.9 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -913,7 +913,7 @@ var Vista = [{
 },{
     number: "46",
     name: "Urth's Gift",
-    area: Area.SOUTH_SHROUD,
+    area: Zone.SOUTH_SHROUD,
     zone: "South Shroud",
     coordinates: { x: 33.3, y: 23.9 },
     weather: [ Weather.FOG ],
@@ -923,7 +923,7 @@ var Vista = [{
 },{
     number: "47",
     name: "Quarrymill",
-    area: Area.SOUTH_SHROUD,
+    area: Zone.SOUTH_SHROUD,
     zone: "South Shroud",
     coordinates: { x: 25.4, y: 21.1 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -933,7 +933,7 @@ var Vista = [{
 },{
     number: "48",
     name: "Ixali Logging Grounds",
-    area: Area.NORTH_SHROUD,
+    area: Zone.NORTH_SHROUD,
     zone: "North Shroud",
     coordinates: { x: 18.4, y: 19.5 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -943,7 +943,7 @@ var Vista = [{
 },{
     number: "49",
     name: "Fallen Neurolink",
-    area: Area.NORTH_SHROUD,
+    area: Zone.NORTH_SHROUD,
     zone: "North Shroud",
     coordinates: { x: 15.8, y: 32.0 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -953,7 +953,7 @@ var Vista = [{
 },{
     number: "50",
     name: "Alder Springs",
-    area: Area.NORTH_SHROUD,
+    area: Zone.NORTH_SHROUD,
     zone: "North Shroud",
     coordinates: { x: 15.4, y: 27.2 },
     weather: [ Weather.CLOUDS ],
@@ -963,7 +963,7 @@ var Vista = [{
 },{
     number: "51",
     name: "Castrum Marinum",
-    area: Area.WESTERN_THANALAN,
+    area: Zone.WESTERN_THANALAN,
     zone: "Western Thanalan",
     coordinates: { x: 8.7, y: 5.2 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -973,7 +973,7 @@ var Vista = [{
 },{
     number: "52",
     name: "Vesper Bay",
-    area: Area.WESTERN_THANALAN,
+    area: Zone.WESTERN_THANALAN,
     zone: "Western Thanalan",
     coordinates: { x: 12.4, y: 14.8 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -983,7 +983,7 @@ var Vista = [{
 },{
     number: "53",
     name: "Black Brush Station",
-    area: Area.CENTRAL_THANALAN,
+    area: Zone.CENTRAL_THANALAN,
     zone: "Central Thanalan",
     coordinates: { x: 21.4, y: 17.5 },
     weather: [ Weather.DUST_STORMS ],
@@ -993,7 +993,7 @@ var Vista = [{
 },{
     number: "54",
     name: "Gate of Nald",
-    area: Area.CENTRAL_THANALAN,
+    area: Zone.CENTRAL_THANALAN,
     zone: "Central Thanalan",
     coordinates: { x: 18.5, y: 26.1 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -1003,7 +1003,7 @@ var Vista = [{
 },{
     number: "55",
     name: "The Burning Wall",
-    area: Area.EASTERN_THANALAN,
+    area: Zone.EASTERN_THANALAN,
     zone: "Eastern Thanalan",
     coordinates: { x: 30.7, y: 26.5 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -1013,7 +1013,7 @@ var Vista = [{
 },{
     number: "56",
     name: "The Golden Bazaar",
-    area: Area.EASTERN_THANALAN,
+    area: Zone.EASTERN_THANALAN,
     zone: "Eastern Thanalan",
     coordinates: { x: 10.0, y: 16.7 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -1023,7 +1023,7 @@ var Vista = [{
 },{
     number: "57",
     name: "Thal's Respite",
-    area: Area.EASTERN_THANALAN,
+    area: Zone.EASTERN_THANALAN,
     zone: "Eastern Thanalan",
     coordinates: { x: 25.2, y: 14.7 },
     weather: [ Weather.SHOWERS ],
@@ -1033,7 +1033,7 @@ var Vista = [{
 },{
     number: "58",
     name: "Nald's Reflection",
-    area: Area.SOUTHERN_THANALAN,
+    area: Zone.SOUTHERN_THANALAN,
     zone: "Southern Thanalan",
     coordinates: { x: 12.2, y: 22.9 },
     weather: [ Weather.FOG ],
@@ -1043,7 +1043,7 @@ var Vista = [{
 },{
     number: "59",
     name: "Zahar'ak",
-    area: Area.SOUTHERN_THANALAN,
+    area: Zone.SOUTHERN_THANALAN,
     zone: "Southern Thanalan",
     coordinates: { x: 19.3, y: 20.5 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -1053,7 +1053,7 @@ var Vista = [{
 },{
     number: "60",
     name: "The Sagolii Desert",
-    area: Area.SOUTHERN_THANALAN,
+    area: Zone.SOUTHERN_THANALAN,
     zone: "Southern Thanalan",
     coordinates: { x: 21.3, y: 38.6 },
     weather: [ Weather.HEAT_WAVES ],
@@ -1063,7 +1063,7 @@ var Vista = [{
 },{
     number: "61",
     name: "The Sunken Temple of Qarn",
-    area: Area.SOUTHERN_THANALAN,
+    area: Zone.SOUTHERN_THANALAN,
     zone: "Southern Thanalan",
     coordinates: { x: 23.8, y: 11.8 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -1073,7 +1073,7 @@ var Vista = [{
 },{
     number: "62",
     name: "Minotaur Malm",
-    area: Area.SOUTHERN_THANALAN,
+    area: Zone.SOUTHERN_THANALAN,
     zone: "Southern Thanalan",
     coordinates: { x: 14.6, y: 26.5 },
     weather: [ Weather.HEAT_WAVES ],
@@ -1083,7 +1083,7 @@ var Vista = [{
 },{
     number: "63",
     name: "East Watchtower",
-    area: Area.NORTHERN_THANALAN,
+    area: Zone.NORTHERN_THANALAN,
     zone: "Northern Thanalan",
     coordinates: { x: 22.2, y: 25.7 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -1093,7 +1093,7 @@ var Vista = [{
 },{
     number: "64",
     name: "Ceruleum Pipeline",
-    area: Area.NORTHERN_THANALAN,
+    area: Zone.NORTHERN_THANALAN,
     zone: "Northern Thanalan",
     coordinates: { x: 20.6, y: 29.5, z: 0.5 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -1103,7 +1103,7 @@ var Vista = [{
 },{
     number: "65",
     name: "Bluefog",
-    area: Area.NORTHERN_THANALAN,
+    area: Zone.NORTHERN_THANALAN,
     zone: "Northern Thanalan",
     coordinates: { x: 20.8, y: 22.5 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -1113,7 +1113,7 @@ var Vista = [{
 },{
     number: "66",
     name: "Raubahn's Push",
-    area: Area.NORTHERN_THANALAN,
+    area: Zone.NORTHERN_THANALAN,
     zone: "Northern Thanalan",
     coordinates: { x: 20.0, y: 17.7 },
     weather: [ Weather.CLOUDS ],
@@ -1123,7 +1123,7 @@ var Vista = [{
 },{
     number: "67",
     name: "Abandoned Amajina Mythril Mine",
-    area: Area.NORTHERN_THANALAN,
+    area: Zone.NORTHERN_THANALAN,
     zone: "Northern Thanalan",
     coordinates: { x: 26.4, y: 22.7 },
     weather: [ Weather.FOG ],
@@ -1133,7 +1133,7 @@ var Vista = [{
 },{
     number: "68",
     name: "The Nail",
-    area: Area.COERTHAS_CENTRAL_HIGHLANDS,
+    area: Zone.COERTHAS_CENTRAL_HIGHLANDS,
     zone: "Coerthas Central Highlands",
     coordinates: { x: 25.4, y: 29.9 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -1143,7 +1143,7 @@ var Vista = [{
 },{
     number: "69",
     name: "The Observatorium",
-    area: Area.COERTHAS_CENTRAL_HIGHLANDS,
+    area: Zone.COERTHAS_CENTRAL_HIGHLANDS,
     zone: "Coerthas Central Highlands",
     coordinates: { x: 25.5, y: 29.8 },
     weather: [ Weather.FOG ],
@@ -1153,7 +1153,7 @@ var Vista = [{
 },{
     number: "70",
     name: "The Frozen Fang",
-    area: Area.COERTHAS_CENTRAL_HIGHLANDS,
+    area: Zone.COERTHAS_CENTRAL_HIGHLANDS,
     zone: "Coerthas Central Highlands",
     coordinates: { x: 11.7, y: 15.8 },
     weather: [ Weather.BLIZZARDS ],
@@ -1163,7 +1163,7 @@ var Vista = [{
 },{
     number: "71",
     name: "The Holy See of Ishgard",
-    area: Area.COERTHAS_CENTRAL_HIGHLANDS,
+    area: Zone.COERTHAS_CENTRAL_HIGHLANDS,
     zone: "Coerthas Central Highlands",
     coordinates: { x: 12.8, y: 17.3, z: 1.4 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -1173,7 +1173,7 @@ var Vista = [{
 },{
     number: "72",
     name: "Boulder Downs",
-    area: Area.COERTHAS_CENTRAL_HIGHLANDS,
+    area: Zone.COERTHAS_CENTRAL_HIGHLANDS,
     zone: "Coerthas Central Highlands",
     coordinates: { x: 7.8, y: 28.9, z: 1.8 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -1183,7 +1183,7 @@ var Vista = [{
 },{
     number: "73",
     name: "The Fury's Gaze",
-    area: Area.COERTHAS_CENTRAL_HIGHLANDS,
+    area: Zone.COERTHAS_CENTRAL_HIGHLANDS,
     zone: "Coerthas Central Highlands",
     coordinates: { x: 7.9, y: 31.3 },
     weather: [ Weather.BLIZZARDS, Weather.SNOW ],
@@ -1193,7 +1193,7 @@ var Vista = [{
 },{
     number: "74",
     name: "Snowcloak",
-    area: Area.COERTHAS_CENTRAL_HIGHLANDS,
+    area: Zone.COERTHAS_CENTRAL_HIGHLANDS,
     zone: "Coerthas Central Highlands",
     coordinates: { x: 2.2, y: 21.4 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -1203,7 +1203,7 @@ var Vista = [{
 },{
     number: "75",
     name: "Camp Dragonhead",
-    area: Area.COERTHAS_CENTRAL_HIGHLANDS,
+    area: Zone.COERTHAS_CENTRAL_HIGHLANDS,
     zone: "Coerthas Central Highlands",
     coordinates: { x: 26.5, y: 17.7 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -1213,7 +1213,7 @@ var Vista = [{
 },{
     number: "76",
     name: "The Steel Vigil",
-    area: Area.COERTHAS_CENTRAL_HIGHLANDS,
+    area: Zone.COERTHAS_CENTRAL_HIGHLANDS,
     zone: "Coerthas Central Highlands",
     coordinates: { x: 28.2, y: 10.3 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -1223,7 +1223,7 @@ var Vista = [{
 },{
     number: "77",
     name: "Castrum Centri",
-    area: Area.MOR_DHONA,
+    area: Zone.MOR_DHONA,
     zone: "Mor Dhona",
     coordinates: { x: 9.8, y: 13.5 },
     weather: [ Weather.GLOOM ],
@@ -1233,7 +1233,7 @@ var Vista = [{
 },{
     number: "78",
     name: "The Crystal Tower",
-    area: Area.MOR_DHONA,
+    area: Zone.MOR_DHONA,
     zone: "Mor Dhona",
     coordinates: { x: 27.4, y: 8.0, z: 0.6 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -1243,7 +1243,7 @@ var Vista = [{
 },{
     number: "79",
     name: "Rathefrost",
-    area: Area.MOR_DHONA,
+    area: Zone.MOR_DHONA,
     zone: "Mor Dhona",
     coordinates: { x: 18.6, y: 17.7 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
@@ -1253,7 +1253,7 @@ var Vista = [{
 },{
     number: "80",
     name: "The Keeper of the Lake",
-    area: Area.MOR_DHONA,
+    area: Zone.MOR_DHONA,
     zone: "Mor Dhona",
     coordinates: { x: 26.1, y: 11.2 },
     weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
