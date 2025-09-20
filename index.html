@@ -153,51 +153,7 @@
                 <div class="tab-pane fade" id="vistas" role="tabpanel" aria-labelledby="vista-tab">
                     <h3>Vista Oracle</h3>
 
-                    <div class="table-responsive" style="overflow-x: auto; white-space: nowrap; scroll-behavior: smooth;">
-                        <table class="table table-bordered mb-0 align-middle">
-                            <thead>
-                                <tr>
-                                    <th style="min-width: 200px;">Vista</th>
-                                    <template x-for="slot in windowStarts" :key="slot">
-                                        <th class="text-nowrap">
-                                            <span class="badge text-bg-secondary">ET</span>
-                                            <span x-text="formatEorzeanTime(slot)"></span><br>
-                                            <span class="badge text-bg-secondary">LT</span>
-                                            <span x-text="formatLocalTime(slot)"></span>
-                                        </th>
-                                    </template>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <template x-for="(vista, idx) in Vista" :key="vista.name">
-                                    <tr :id="`vista-${idx}`">
-                                        <!-- First column with name + arrows -->
-                                        <td class="text-nowrap" style="position: sticky; left: 0; background: white; z-index: 2;">
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <button class="btn btn-light btn-sm" @click="scrollToSlot(idx, -1)" title="Previous">
-                                                    <i class="bi bi-caret-left-fill"></i>
-                                                </button>
-                                                <span x-text="vista.name"></span>
-                                                <button class="btn btn-light btn-sm" @click="scrollToSlot(idx, 1)" title="Next">
-                                                    <i class="bi bi-caret-right-fill"></i>
-                                                </button>
-                                            </div>
-                                        </td>
-
-                                        <!-- Timeslot cells -->
-                                        <template x-for="(slot, sIdx) in windowStarts" :key="slot">
-                                            <td class="text-center" :id="`vista-${idx}-slot-${sIdx}`">
-                                                <!-- Example: mark if vista is visitable -->
-                                                <template x-if="isVistaAvailable(vista, slot)">
-                                                    <div class="bg-success rounded-pill" style="height: 16px;"></div>
-                                                </template>
-                                            </td>
-                                        </template>
-                                    </tr>
-                                </template>
-                            </tbody>
-                        </table>
-                    </div>
+                    
 
                 </div>
             </div>

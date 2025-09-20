@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Getting Started with Chart JS with www.chartjs3.com</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        font-family: sans-serif;
+      }
+      .chartMenu {
+        width: 100vw;
+        height: 40px;
+        background: #1A1A1A;
+        color: rgba(54, 162, 235, 1);
+      }
+      .chartMenu p {
+        padding: 10px;
+        font-size: 20px;
+      }
+      .chartCard {
+        width: 100vw;
+        height: calc(100vh - 40px);
+        background: rgba(54, 162, 235, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .chartBox {
+        width: 80%;
+        padding: 20px;
+        border-radius: 20px;
+        border: solid 3px rgba(54, 162, 235, 1);
+        background: white;
+      }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
+          integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+  </head>
+  <body>
+    <div class="chartMenu">
+      <p>WWW.CHARTJS3.COM (Chart JS <span id="chartVersion"></span>)</p>
+    </div>
+    <div class="chartCard">
+      <div class="chartBox">
+        <h4>Limsa Lominsa Vistas</h4>
+        <canvas id="myChart"></canvas>
+        <input type="month" onChange="chartFilter(this)" />
+      </div>
+    </div>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script>
+      // setup
+      const colors = [
+        'rgba(255, 26, 104, 1)', // red
+        'rgba(255, 159, 64, 1)', // orange
+        'rgba(75, 192, 192, 1)', // green
+        'rgba(54, 162, 235, 1)'  // blue
+      ];
+
+      const data = {
+        datasets: [{
+          label: 'Vistas',
+          data: [
+            {x: [startDate, endDate], y: 'Barracuda Piers', weather: [{name: 'Fair Skies', icon: 'img/weather/Fair_Skies_icon.png'}, {name: 'Clear Skies', icon: 'img/weather/Clear_Skies_icon.png'}], emote: {command: '/lookout', icon: 'img/emotes/Lookout.png'}},
+            {x: ['2025-09-03', '2025-09-06'], y: 'Task 1', name: "James", status: 2},
+            {x: ['2025-09-07', '2025-09-09'], y: 'Task 1', name: "James", status: 2},
+            {x: ['2025-09-06', '2025-09-12'], y: 'Task 2', name: "Luna", status: 2},
+            {x: ['2025-09-09', '2025-09-12'], y: 'Task 3', name: "David", status: 2},
+            {x: ['2025-09-12', '2025-09-21'], y: 'Task 4', name: "Lily", status: 2},
+            {x: ['2025-09-15', '2025-09-24'], y: 'Task 5', name: "Santiago", status: 1},
+            {x: ['2025-09-18', '2025-09-30'], y: 'Task 6', name: "James", status: 0},
+            {x: ['2025-10-12', '2025-10-21'], y: 'Task 7', name: "Lily", status: 2},
+            {x: ['2025-10-15', '2025-10-24'], y: 'Task 8', name: "Santiago", status: 1},
+            {x: ['2025-10-18', '2025-10-30'], y: 'Task 9', name: "James", status: 0},
+            {x: ['2025-09-03', '2025-09-06'], y: 'Task 10', name: "James", status: 2},
+            {x: ['2025-09-06', '2025-09-12'], y: 'Task 11', name: "Luna", status: 2},
+            {x: ['2025-09-09', '2025-09-12'], y: 'Task 12', name: "David", status: 2},
+            {x: ['2025-09-12', '2025-09-21'], y: 'Task 13', name: "Lily", status: 2},
+            {x: ['2025-09-15', '2025-09-24'], y: 'Task 14', name: "Santiago", status: 1},
+            {x: ['2025-09-18', '2025-09-30'], y: 'Task 15', name: "James", status: 0},
+            {x: ['2025-10-12', '2025-10-21'], y: 'Task 16', name: "Lily", status: 2},
+            {x: ['2025-10-15', '2025-10-24'], y: 'Task 17', name: "Santiago", status: 1},
+            {x: ['2025-10-18', '2025-10-30'], y: 'Task 18', name: "James", status: 0},
+            {x: ['2025-09-03', '2025-09-06'], y: 'Task 19', name: "James", status: 2},
+            {x: ['2025-09-06', '2025-09-12'], y: 'Task 20', name: "Luna", status: 2},
+            {x: ['2025-09-09', '2025-09-12'], y: 'Task 21', name: "David", status: 2},
+            {x: ['2025-09-12', '2025-09-21'], y: 'Task 22', name: "Lily", status: 2},
+            {x: ['2025-09-15', '2025-09-24'], y: 'Task 23', name: "Santiago", status: 1},
+            {x: ['2025-09-18', '2025-09-30'], y: 'Task 24', name: "James", status: 0},
+            {x: ['2025-10-12', '2025-10-21'], y: 'Task 25', name: "Lily", status: 2},
+            {x: ['2025-10-15', '2025-10-24'], y: 'Task 26', name: "Santiago", status: 1},
+            {x: ['2025-10-18', '2025-10-30'], y: 'Task 27', name: "James", status: 0},
+            {x: ['2025-09-03', '2025-09-06'], y: 'Task 28', name: "James", status: 2},
+            {x: ['2025-09-06', '2025-09-12'], y: 'Task 29', name: "Luna", status: 2},
+            {x: ['2025-09-09', '2025-09-12'], y: 'Task 30', name: "David", status: 2},
+            {x: ['2025-09-12', '2025-09-21'], y: 'Task 31', name: "Lily", status: 2},
+            {x: ['2025-09-15', '2025-09-24'], y: 'Task 32', name: "Santiago", status: 1},
+            {x: ['2025-09-18', '2025-09-30'], y: 'Task 33', name: "James", status: 0},
+            {x: ['2025-10-12', '2025-10-21'], y: 'Task 34', name: "Lily", status: 2},
+            {x: ['2025-10-15', '2025-10-24'], y: 'Task 35', name: "Santiago", status: 1},
+            {x: ['2025-10-18', '2025-10-30'], y: 'Task 36', name: "James", status: 0},
+          ],
+          backgroundColor: (ctx) => {
+            const status = ctx.dataset.data[ctx.dataIndex].status;
+            return colors[status];
+          },
+          // borderColor: (ctx) => {
+          //   const status = ctx.dataset.data[ctx.dataIndex].status;
+          //   return colors[status];
+          // },
+          borderWidth: 0,
+          borderSkipped: false,
+          borderRadius: 100,
+          barPercentage: 0.5,
+          categoryPercentage: 0.8,
+        }]
+      };
+
+      // todayLine plugin
+      const todayLine = {
+        id: 'todayLine',
+        afterDatasetsDraw(chart, args, options) {
+          const {ctx, data, chartArea: {top, bottom, left, right}, scales: {x, y}} = chart;
+
+          const today = new Date();
+          if (today < x.min || today > x.max) {
+            return;
+          }
+
+          const xPos = x.getPixelForValue(today);
+
+          if (xPos < left || xPos > right) {
+            return;
+          }
+
+          ctx.save();
+          ctx.lineWidth = 1;
+          ctx.strokeStyle = 'rgba(102, 102, 102, 1)';
+          ctx.fillStyle = 'rgba(102, 102, 102, 1)';
+          ctx.beginPath();
+          ctx.moveTo(xPos, top);
+          ctx.lineTo(xPos - 5, top - 8);
+          ctx.lineTo(xPos + 5, top - 8);
+          ctx.closePath();
+          ctx.stroke();
+          ctx.fill();
+          ctx.restore();
+
+          ctx.save();
+          ctx.fillStyle = 'rgba(102, 102, 102, 1)';
+          ctx.textAlign = 'center';
+          ctx.font = '12px sans-serif';
+          ctx.fillText('Now', xPos, bottom + 15);
+          ctx.restore();
+
+          ctx.save();
+          ctx.lineWidth = 3;
+          ctx.strokeStyle = 'rgba(102, 102, 102, 1)';
+          ctx.beginPath();
+          ctx.moveTo(xPos, top);
+          ctx.lineTo(xPos, bottom);
+          ctx.setLineDash([5, 5]);
+          ctx.stroke();
+          ctx.restore();
+        }
+      };
+
+      // assignedTasks plugin
+      const assignedTasks = {
+        id: 'assignedTasks',
+        afterDatasetsDraw(chart, args, options) {
+          const {ctx, data, chartArea: {top, bottom, left, right}, scales: {x, y}} = chart;
+          ctx.save();
+          ctx.font = 'bolder 12px sans-serif';
+          ctx.fillStyle = 'black';
+          ctx.textBaseline = 'middle';
+          
+          ctx.fillText('Assigned To', 10, top - 18);
+
+          data.datasets.forEach((dataset) => {
+            dataset.data.forEach((datapoint) => {
+              const yPos = y.getPixelForValue(datapoint.y);
+              ctx.fillText(datapoint.name, 10, yPos);
+            });
+          });
+
+          ctx.restore();
+        }
+      };
+
+      // status plugin
+      const status = {
+        id: 'status',
+        afterDatasetsDraw(chart, args, pluginOptions) {
+          const {ctx, data, options, chartArea: {top, bottom, left, right}, scales: {x, y}} = chart;
+
+          const icons = ['\uf00d', '\uf110', '\uf00c'];
+          
+          ctx.save();
+          ctx.textBaseline = 'middle';
+          ctx.textAlign = 'center';
+          ctx.font = 'bolder 12px sans-serif';
+          ctx.fillStyle = 'black';
+
+          ctx.fillText('Status', right + 50, top - 18);
+
+          ctx.font = 'bolder 12px FontAwesome';
+
+          data.datasets.forEach((dataset) => {
+            dataset.data.forEach((datapoint) => {
+              const yPos = y.getPixelForValue(datapoint.y);
+              const xEndPos = right + options.layout.padding.right / 2;
+              ctx.fillStyle = colors[datapoint.status];
+              ctx.beginPath();
+              ctx.arc(xEndPos, yPos, 12, 0, 2 * Math.PI, false);
+              ctx.closePath();
+              ctx.fill();
+              ctx.fillStyle = 'white';
+              ctx.fillText(icons[datapoint.status], xEndPos, yPos);
+            });
+          });
+
+          ctx.restore();
+        }
+      };
+
+      // weekendHighlight plugin
+      const weekendHighlight = {
+        id: 'weekendHighlight',
+        beforeDatasetsDraw(chart, args, options) {
+          const {ctx, data, chartArea: {top, bottom, left, right, height}, scales: {x, y}} = chart;
+
+          const dayInMs = 24 * 60 * 60 * 1000;
+          const startDate = new Date(x.min);
+          const endDate = new Date(x.max);
+
+          let currentDate = new Date(startDate);
+          currentDate.setHours(0, 0, 0, 0);
+
+          while (currentDate <= endDate) {
+            const day = currentDate.getDay();
+            const nextDate = new Date(currentDate);
+            nextDate.setDate(currentDate.getDate() + 1);
+
+            if (day === 0 || day === 6) { // Sunday or Saturday
+              console.log('Highlighting weekend:', currentDate);
+              const xStart = x.getPixelForValue(currentDate);
+              const xEnd = x.getPixelForValue(nextDate);
+
+              ctx.save();
+              ctx.fillStyle = 'rgba(202, 202, 202, 0.2)';
+              ctx.fillRect(xStart, top, xEnd - xStart, height);
+              ctx.restore();
+            }
+            currentDate = nextDate;
+          }
+        }
+      };
+
+      // config 
+      const config = {
+        type: 'bar',
+        data,
+        options: { 
+          animation: true,
+          layout: {
+            padding: {
+              left: 100,
+              // right: 100,
+              bottom: 20,
+            }
+          },
+          indexAxis: 'y',
+          scales: {
+            x: {
+              position: 'top',
+              type: 'time',
+              time: {
+                displayFormats: {
+                  day: 'd'
+                },
+              },
+              min: '2025-09-01',
+              max: '2025-09-31',
+            },
+            // y: {
+            //   min: 0,
+            //   max: 5,
+            //   labels: ['Task 1', 'Task 2', 'Task 3', 'Task 4', 'Task 5', 'Task 6', 'Task 7', 'Task 8', 'Task 9', 'Task 10',
+            //            'Task 11', 'Task 12', 'Task 13', 'Task 14', 'Task 15', 'Task 16', 'Task 17', 'Task 18', 'Task 19', 'Task 20',
+            //            'Task 21', 'Task 22', 'Task 23', 'Task 24', 'Task 25', 'Task 26', 'Task 27', 'Task 28', 'Task 29', 'Task 30',
+            //            'Task 31', 'Task 32', 'Task 33', 'Task 34', 'Task 35', 'Task 36'
+            //           ],
+              
+            // }
+          },
+          plugins: {
+            title: {
+              display: false,
+              text: 'Limsa Lominsa Vistas',
+              align: 'start'
+            },
+            legend: {
+              display: false
+            },
+            tooltip: {
+              displayColors: false,
+              yAlign: 'bottom',
+              xAlign: 'center',
+              callbacks: {
+                title: (context) => {
+                  const startDate = new Date(context[0].raw.x[0]);
+                  const endDate = new Date(context[0].raw.x[1]);
+                  const formattedStartDate = startDate.toLocaleDateString([], { year: 'numeric', month: 'short', day: 'numeric' });
+                  const formattedEndDate = endDate.toLocaleDateString([], { year: 'numeric', month: 'short', day: 'numeric' });
+                  return [context[0].raw.name, `Start: ${formattedStartDate} - End: ${formattedEndDate}`];
+                },
+                label: (context) => `Task: ${context.raw.y}`
+              }
+            }
+          }
+        },
+        plugins: [todayLine, /*assignedTasks, status, */weekendHighlight]
+      };
+
+      // render init block
+      const myChart = new Chart(
+        document.getElementById('myChart'),
+        config
+      );
+
+      // Instantly assign Chart.js version
+      const chartVersion = document.getElementById('chartVersion');
+      chartVersion.innerText = Chart.version;
+
+      // filter function
+      function chartFilter(dateInputElement) {
+        const value = dateInputElement.value;
+        let year, month;
+        if (!value) {
+          const now = new Date();
+          [year, month] = [now.getFullYear(), now.getMonth()];
+        } else {
+          [year, month] = value.split('-').map(Number);
+        }
+        const startDate = new Date(year, month-1, 1);
+        const endDate = new Date(year, month, 0);
+        myChart.options.scales.x.min = formatDate(startDate);
+        myChart.options.scales.x.max = formatDate(endDate);
+        console.log(myChart.options.scales.x.min, myChart.options.scales.x.max);
+        myChart.update();
+      }
+
+      function formatDate(date) {
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        return `${year}-${month}-${day}`;
+      } 
+    </script>
+
+  </body>
+</html>
