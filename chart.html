@@ -36,9 +36,7 @@
         background: white;
       }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
-          integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg=="
-          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="css/font-awesome.css" />
   </head>
   <body>
     <div class="chartMenu">
@@ -51,8 +49,8 @@
         <input type="month" onChange="chartFilter(this)" />
       </div>
     </div>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script type="text/javascript" src="js/chart.umd.min.js"></script>
+    <script type="text/javascript" src="js/chartjs-adapter-date-fns.bundle.min.js"></script>
     <script>
       // setup
       const colors = [
@@ -66,7 +64,7 @@
         datasets: [{
           label: 'Vistas',
           data: [
-            {x: [startDate, endDate], y: 'Barracuda Piers', weather: [{name: 'Fair Skies', icon: 'img/weather/Fair_Skies_icon.png'}, {name: 'Clear Skies', icon: 'img/weather/Clear_Skies_icon.png'}], emote: {command: '/lookout', icon: 'img/emotes/Lookout.png'}},
+            //{x: [startDate, endDate], y: 'Barracuda Piers', weather: [{name: 'Fair Skies', icon: 'img/weather/Fair_Skies_icon.png'}, {name: 'Clear Skies', icon: 'img/weather/Clear_Skies_icon.png'}], emote: {command: '/lookout', icon: 'img/emotes/Lookout.png'}},
             {x: ['2025-09-03', '2025-09-06'], y: 'Task 1', name: "James", status: 2},
             {x: ['2025-09-07', '2025-09-09'], y: 'Task 1', name: "James", status: 2},
             {x: ['2025-09-06', '2025-09-12'], y: 'Task 2', name: "Luna", status: 2},
