@@ -152,20 +152,402 @@
                 <!-- Vista Oracle -->
                 <div class="tab-pane fade" id="vistas" role="tabpanel" aria-labelledby="vista-tab">
                     <h3>Vista Oracle</h3>
-
+    
+                    <div class="chartBox">
+                        <h4>Limsa Lominsa Vistas</h4>
+                        <canvas id="myChart"></canvas>
+                        <input type="month" onChange="chartFilter(this)" />
+                    </div>
                     
+                    <div x-data
+                         x-show="$store.chartTooltip.show"
+                         x-transition
+                         x-bind:style="`position: absolute; left: ${$store.chartTooltip.x}px; top: ${$store.chartTooltip.y}px;`"
+                         class="chart-tooltip bg-dark text-white small px-2 py-1 rounded shadow">
+                        <template x-for="(point, i) in $store.chartTooltip.data" :key="i">
+                            <div>
+                                <dl class="row">
+                                    <dt class="col-sm-3 text-end">Log&nbsp;Entry</dt>
+                                    <dd class="col-sm-9">
+                                        <span x-text="point.y"></span>: #<span x-text="point.number"></span>
+                                    </dd>
 
+                                    <dt class="col-sm-3 text-end">Location</dt>
+                                    <dd class="col-sm-9">
+                                        <div x-text="point.zone"></div>
+                                            (<small><strong>X</strong></small>: <span x-text="point.location.x"></span>, 
+                                            <small><strong>Y</strong></small>: <span x-text="point.location.y"></span><template x-if="point.location.z !== undefined"><span>, <small><strong>Z</strong></small>: <span x-text="point.location.z"></span></span></template>)
+                                    </dd>
+
+                                    <dt class="col-sm-3 text-end">Emote</dt>
+                                    <dd class="col-sm-9">
+                                        <img :alt="point.emote.command" :src="point.emote.icon" width="20" height="20">&nbsp;<span x-text="point.emote.command"></span>
+                                    </dd>
+
+                                    <dt class="col-sm-3 text-end">Weather</dt>
+                                    <dd class="col-sm-9">
+                                        <template x-for="(w, wi) in point.weather" :key="wi">
+                                            <div><img :alt="w.name" :src="w.icon" width="32" height="32"><span x-text="w.name"></span>&nbsp;</div>
+                                        </template>
+                                    </dd>
+
+                                    <dt class="col-sm-3 text-end"><span class="badge text-bg-secondary" data-bs-toggle="tooltip" data-bs-title="Eorzea Time">ET</span></dt>
+                                    <dd class="col-sm-9">
+                                        <span x-text="point.eorzeaTime[0]"></span> - <span x-text="point.eorzeaTime[1]"></span>
+                                    </dd>
+
+                                    <dt class="col-sm-3 text-end"><span class="badge text-bg-secondary" data-bs-toggle="tooltip" data-bs-title="Local Time">LT</span></dt>
+                                    <dd class="col-sm-9">
+                                        <span x-text="formatLocalTime(new Date(point.x[0]).getTime() / 1000)"></span> -
+                                        <span x-text="formatLocalTime(new Date(point.x[1]).getTime() / 1000)"></span>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </template>
+                    </div>
                 </div>
             </div>
         </div>
     </main>
-    <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle=\"tooltip\"]'));
-        tooltipTriggerList.forEach(function (tooltipTriggerEl) {
-            new bootstrap.Tooltip(tooltipTriggerEl);
+    <script type="text/javascript" src="js/chart.umd.min.js"></script>
+    <script type="text/javascript" src="js/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script id="init-bootstrap-tooltip">
+        document.addEventListener('DOMContentLoaded', function () {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle=\"tooltip\"]'));
+            tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+                new bootstrap.Tooltip(tooltipTriggerEl);
+            });
         });
-    });
-</script>
+    </script>
+    <script id="init-chart-js">
+        // setup
+        const colors = [
+            'rgba(255, 26, 104, 1)', // red
+            'rgba(255, 159, 64, 1)', // orange
+            'rgba(75, 192, 192, 1)', // green
+            'rgba(54, 162, 235, 1)'  // blue
+        ];
+
+        const data = {
+            datasets: [{
+                label: 'Vistas',
+                data: [
+                    {
+                        number: 1,
+                        eorzeaTime: ['08:00', '12:00'],
+                        x: ['2025-09-03 08:00', '2025-09-03 12:00'],
+                        y: 'Barracuda Piers',
+                        weather: [
+                            {name: 'Fair Skies', icon: 'img/weather/Fair_Skies_icon.png'},
+                            {name: 'Clear Skies', icon: 'img/weather/Clear_Skies_icon.png'}
+                        ],
+                        emote: { command: '/lookout', icon: 'img/emotes/Lookout.png'},
+                        zone: "Limsa Lominsa Upper Decks",
+                        location: { x: 9.5, y: 7.8 }
+                    },
+                    {number: 2,  eorzeaTime: ['08:00', '12:00'], x: ['2025-09-03 18:00', '2025-09-04 05:00'], y: 'The Astalicia',               weather: [{name: 'Fair Skies', icon: 'img/weather/Fair_Skies_icon.png'}, {name: 'Clear Skies', icon: 'img/weather/Clear_Skies_icon.png'}], emote: { command: '/lookout', icon: 'img/emotes/Lookout.png'}, zone: "Limsa Lominsa Lower Decks", location: { x: 7.1, y: 15.1 }},
+                    {number: 3,  eorzeaTime: ['08:00', '12:00'], x: ['2025-09-03 05:00', '2025-09-03 08:00'], y: 'Seasong Grotto',              weather: [{name: 'Rain',       icon: 'img/weather/Rain_icon.png'      }, {name: 'Showers',     icon: 'img/weather/Showers_icon.png'    }], emote: { command: '/pray',    icon: 'img/emotes/Pray.png'   }, zone: "Middle La Noscea",          location: { x: 20.3, y: 19.1 }},
+                    {number: 4,  eorzeaTime: ['08:00', '12:00'], x: ['2025-09-03 12:00', '2025-09-03 17:00'], y: 'The Skylift',                 weather: [{name: 'Fair Skies', icon: 'img/weather/Fair_Skies_icon.png'}, {name: 'Clear Skies', icon: 'img/weather/Clear_Skies_icon.png'}], emote: { command: '/lookout', icon: 'img/emotes/Lookout.png'}, zone: "Middle La Noscea",          location: { x: 16.0, y: 17.3 }},
+                    {number: 5,  eorzeaTime: ['08:00', '12:00'], x: ['2025-09-03 08:00', '2025-09-03 12:00'], y: 'La Thagran Eastroad',         weather: [{name: 'Fair Skies', icon: 'img/weather/Fair_Skies_icon.png'}, {name: 'Clear Skies', icon: 'img/weather/Clear_Skies_icon.png'}], emote: { command: '/lookout', icon: 'img/emotes/Lookout.png'}, zone: "Middle La Noscea",          location: { x: 25.3, y: 27.5 }},
+                    {number: 6,  eorzeaTime: ['08:00', '12:00'], x: ['2025-09-03 18:00', '2025-09-04 05:00'], y: 'The Salt Strand',             weather: [{name: 'Fair Skies', icon: 'img/weather/Fair_Skies_icon.png'}, {name: 'Clear Skies', icon: 'img/weather/Clear_Skies_icon.png'}], emote: { command: '/lookout', icon: 'img/emotes/Lookout.png'}, zone: "Lower La Noscea",           location: { x: 23.1, y: 40.2 }},
+                    {number: 7,  eorzeaTime: ['08:00', '12:00'], x: ['2025-09-03 05:00', '2025-09-03 08:00'], y: 'Red Rooster Stead',           weather: [{name: 'Fair Skies', icon: 'img/weather/Fair_Skies_icon.png'}, {name: 'Clear Skies', icon: 'img/weather/Clear_Skies_icon.png'}], emote: { command: '/lookout', icon: 'img/emotes/Lookout.png'}, zone: "Lower La Noscea",           location: { x: 33.5, y: 19.3 }},
+                    {number: 8,  eorzeaTime: ['08:00', '12:00'], x: ['2025-09-03 05:00', '2025-09-03 08:00'], y: 'Brewer\'s Beacon',            weather: [{name: 'Fair Skies', icon: 'img/weather/Fair_Skies_icon.png'}, {name: 'Clear Skies', icon: 'img/weather/Clear_Skies_icon.png'}], emote: { command: '/lookout', icon: 'img/emotes/Lookout.png'}, zone: "Western La Noscea",         location: { x: 29.9, y: 30.7 }},
+                    {number: 9,  eorzeaTime: ['08:00', '12:00'], x: ['2025-09-03 12:00', '2025-09-03 17:00'], y: 'The Leatherworkers\' Guild',  weather: [{name: 'Fair Skies', icon: 'img/weather/Fair_Skies_icon.png'}, {name: 'Clear Skies', icon: 'img/weather/Clear_Skies_icon.png'}], emote: { command: '/lookout', icon: 'img/emotes/Lookout.png'}, zone: "Old Gridania",              location: { x: 12.8, y: 7.8, z: 1.2 }},
+                    {number: 10, eorzeaTime: ['08:00', '12:00'], x: ['2025-09-03 18:00', '2025-09-04 05:00'], y: 'Apkallu Falls',               weather: [{name: 'Fair Skies', icon: 'img/weather/Fair_Skies_icon.png'}, {name: 'Clear Skies', icon: 'img/weather/Clear_Skies_icon.png'}], emote: { command: '/lookout', icon: 'img/emotes/Lookout.png'}, zone: "Old Gridania",              location: { x: 10.8, y: 6.4 }},
+                ],
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(54, 162, 235, 1)'
+                ],
+                borderWidth: 1,
+                borderSkipped: false,
+                borderRadius: 100,
+                barPercentage: 0.5,
+                categoryPercentage: 0.8,
+            }]
+        };
+
+        // todayLine plugin
+        const todayLine = {
+            id: 'todayLine',
+            afterDatasetsDraw(chart, args, options) {
+                const {ctx, data, chartArea: {top, bottom, left, right}, scales: {x, y}} = chart;
+
+                const today = new Date();
+                if (today < x.min || today > x.max) {
+                    return;
+                }
+
+                const xPos = x.getPixelForValue(today);
+
+                if (xPos < left || xPos > right) {
+                    return;
+                }
+
+                ctx.save();
+                ctx.lineWidth = 1;
+                ctx.strokeStyle = 'rgba(102, 102, 102, 1)';
+                ctx.fillStyle = 'rgba(102, 102, 102, 1)';
+                ctx.beginPath();
+                ctx.moveTo(xPos, top);
+                ctx.lineTo(xPos - 5, top - 8);
+                ctx.lineTo(xPos + 5, top - 8);
+                ctx.closePath();
+                ctx.stroke();
+                ctx.fill();
+                ctx.restore();
+
+                ctx.save();
+                ctx.fillStyle = 'rgba(102, 102, 102, 1)';
+                ctx.textAlign = 'center';
+                ctx.font = '12px sans-serif';
+                ctx.fillText('Now', xPos, bottom + 15);
+                ctx.restore();
+
+                ctx.save();
+                ctx.lineWidth = 3;
+                ctx.strokeStyle = 'rgba(102, 102, 102, 1)';
+                ctx.beginPath();
+                ctx.moveTo(xPos, top);
+                ctx.lineTo(xPos, bottom);
+                ctx.setLineDash([5, 5]);
+                ctx.stroke();
+                ctx.restore();
+            }
+        };
+
+        // vistaNumber plugin
+        const vistaNumber = {
+            id: 'vistaNumber',
+            afterDatasetsDraw(chart, args, options) {
+                const {ctx, data, chartArea: {top, bottom, left, right}, scales: {x, y}} = chart;
+                ctx.save();
+                ctx.font = 'bolder 12px sans-serif';
+                ctx.fillStyle = 'black';
+                ctx.textBaseline = 'middle';
+                
+                ctx.fillText('#', 10, top - 18);
+
+                data.datasets.forEach((dataset) => {
+                    dataset.data.forEach((datapoint) => {
+                        const yPos = y.getPixelForValue(datapoint.y);
+                        ctx.fillText(datapoint.number, 10, yPos);
+                    });
+                });
+
+                ctx.restore();
+            }
+        };
+
+        // status plugin
+        const status = {
+            id: 'status',
+            afterDatasetsDraw(chart, args, pluginOptions) {
+                const {ctx, data, options, chartArea: {top, bottom, left, right}, scales: {x, y}} = chart;
+
+                const icons = ['\uf00d', '\uf110', '\uf00c'];
+                
+                ctx.save();
+                ctx.textBaseline = 'middle';
+                ctx.textAlign = 'center';
+                ctx.font = 'bolder 12px sans-serif';
+                ctx.fillStyle = 'black';
+
+                ctx.fillText('Status', right + 50, top - 18);
+
+                ctx.font = 'bolder 12px FontAwesome';
+
+                data.datasets.forEach((dataset) => {
+                    dataset.data.forEach((datapoint) => {
+                        const yPos = y.getPixelForValue(datapoint.y);
+                        const xEndPos = right + options.layout.padding.right / 2;
+                        ctx.fillStyle = colors[datapoint.status];
+                        ctx.beginPath();
+                        ctx.arc(xEndPos, yPos, 12, 0, 2 * Math.PI, false);
+                        ctx.closePath();
+                        ctx.fill();
+                        ctx.fillStyle = 'white';
+                        ctx.fillText(icons[datapoint.status], xEndPos, yPos);
+                    });
+                });
+
+                ctx.restore();
+            }
+        };
+
+        // weekendHighlight plugin
+        const weekendHighlight = {
+            id: 'weekendHighlight',
+            beforeDatasetsDraw(chart, args, options) {
+                const {ctx, data, chartArea: {top, bottom, left, right, height}, scales: {x, y}} = chart;
+
+                const dayInMs = 24 * 60 * 60 * 1000;
+                const startDate = new Date(x.min);
+                const endDate = new Date(x.max);
+
+                let currentDate = new Date(startDate);
+                currentDate.setHours(0, 0, 0, 0);
+
+                while (currentDate <= endDate) {
+                    const day = currentDate.getDay();
+                    const nextDate = new Date(currentDate);
+                    nextDate.setDate(currentDate.getDate() + 1);
+
+                    if (day === 0 || day === 6) { // Sunday or Saturday
+                        console.log('Highlighting weekend:', currentDate);
+                        const xStart = x.getPixelForValue(currentDate);
+                        const xEnd = x.getPixelForValue(nextDate);
+
+                        ctx.save();
+                        ctx.fillStyle = 'rgba(202, 202, 202, 0.2)';
+                        ctx.fillRect(xStart, top, xEnd - xStart, height);
+                        ctx.restore();
+                    }
+                    currentDate = nextDate;
+                }
+            }
+        };
+
+        // config 
+        const config = {
+            type: 'bar',
+            data,
+            options: { 
+                animation: true,
+                layout: {
+                    padding: {
+                    left: 100,
+                    // right: 100,
+                    bottom: 20,
+                    }
+                },
+                indexAxis: 'y',
+                scales: {
+                    x: {
+                    position: 'top',
+                    type: 'time',
+                    time: {
+                        displayFormats: {
+                            day: 'd'
+                        },
+                    },
+                    min: '2025-09-01',
+                    max: '2025-09-31',
+                    },
+                    // y: {
+                    //   min: 0,
+                    //   max: 5,
+                    //   labels: ['Task 1', 'Task 2', 'Task 3', 'Task 4', 'Task 5', 'Task 6', 'Task 7', 'Task 8', 'Task 9', 'Task 10',
+                    //            'Task 11', 'Task 12', 'Task 13', 'Task 14', 'Task 15', 'Task 16', 'Task 17', 'Task 18', 'Task 19', 'Task 20',
+                    //            'Task 21', 'Task 22', 'Task 23', 'Task 24', 'Task 25', 'Task 26', 'Task 27', 'Task 28', 'Task 29', 'Task 30',
+                    //            'Task 31', 'Task 32', 'Task 33', 'Task 34', 'Task 35', 'Task 36'
+                    //           ],
+                    
+                    // }
+                },
+                plugins: {
+                    title: {
+                        display: false
+                    },
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        enabled: false,
+                        position: 'nearest',
+                        external: externalTooltipHandler,
+                    }
+                }
+            },
+            plugins: [todayLine, vistaNumber, weekendHighlight]
+        };
+
+        // render init block
+        const myChart = new Chart(
+            document.getElementById('myChart'),
+            config
+        );
+
+        // filter function
+        function chartFilter(dateInputElement) {
+            const value = dateInputElement.value;
+            let year, month;
+            if (!value) {
+                const now = new Date();
+                [year, month] = [now.getFullYear(), now.getMonth()];
+            } else {
+                [year, month] = value.split('-').map(Number);
+            }
+            const startDate = new Date(year, month-1, 1);
+            const endDate = new Date(year, month, 0);
+            myChart.options.scales.x.min = formatDateYyyyMmDd(startDate);
+            myChart.options.scales.x.max = formatDateYyyyMmDd(endDate);
+            console.log(myChart.options.scales.x.min, myChart.options.scales.x.max);
+            myChart.update();
+        }
+
+        function formatDateYyyyMmDd(date) {
+            const year = date.getFullYear();
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const day = date.getDate().toString().padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+        
+        function externalTooltipHandler(context) {
+            const { chart, tooltip } = context;
+            const tooltipStore = Alpine.store('chartTooltip');
+            const tooltipEl = document.querySelector('.chart-tooltip'); // the Alpine tooltip container
+
+            if (!tooltipEl) return;
+
+            if (tooltip.opacity === 0) {
+                tooltipStore.show = false;
+                return;
+            }
+
+            const canvasRect = chart.canvas.getBoundingClientRect();
+
+            // temporarily show offscreen to measure natural size
+            tooltipEl.style.display = 'block';
+            tooltipEl.style.left = '-9999px';
+            tooltipEl.style.top = '-9999px';
+            tooltipEl.style['max-width'] = '300px'; // prevent stretching
+            tooltipEl.style.width = "max-content";
+
+            const tooltipWidth = tooltipEl.offsetWidth;
+            const tooltipHeight = tooltipEl.offsetHeight;
+
+            // preferred position: centered below point
+            let x = canvasRect.left + tooltip.caretX - tooltipWidth / 2 + window.scrollX;
+            let y = canvasRect.top + tooltip.caretY + 10 + window.scrollY;
+
+            // flip above if too close to bottom of viewport
+            if (y + tooltipHeight > window.scrollY + window.innerHeight) {
+                y = canvasRect.top + tooltip.caretY - tooltipHeight - 10 + window.scrollY;
+            }
+
+            // clamp left/right inside viewport
+            x = Math.max(window.scrollX + 5, Math.min(x, window.scrollX + window.innerWidth - tooltipWidth - 10));
+            y = Math.max(window.scrollY + 5, Math.min(y, window.scrollY + window.innerHeight - tooltipHeight - 10));
+
+            tooltipEl.style.left = `${x}px`;
+            tooltipEl.style.top = `${y}px`;
+
+            // pass data
+            tooltipStore.data = tooltip.dataPoints.map(dp => dp.raw);
+            tooltipStore.show = true;
+        }
+        
+        document.addEventListener('alpine:init', () => {
+            Alpine.store('chartTooltip', {
+                show: false,
+                x: 0,
+                y: 0,
+                data: []
+            });
+        });
+    </script>
 </body>
 </html>
