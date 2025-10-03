@@ -133,10 +133,10 @@
                                             <template x-for="windowStart in windowStarts" :key="windowStart">
                                                 <td class="small fixed-col">
                                                     <div class="d-flex flex-column align-items-center justify-content-center">
-                                                        <img :src="getWeatherForecast(zone.name, windowStart + windowShifts * SECONDS_PER_WEATHER_WINDOW).image"
-                                                            :alt="getWeatherForecast(zone.name, windowStart + windowShifts * SECONDS_PER_WEATHER_WINDOW).weather"
+                                                        <img :src="getWeatherForecast(zone.name, windowStart + windowShifts * SECONDS_PER_WEATHER_WINDOW).icon"
+                                                            :alt="getWeatherForecast(zone.name, windowStart + windowShifts * SECONDS_PER_WEATHER_WINDOW).name"
                                                             style="width:32px;height:32px;" class="mb-1">
-                                                        <span x-html="getWeatherForecast(zone.name, windowStart + windowShifts * SECONDS_PER_WEATHER_WINDOW).weather"
+                                                        <span x-html="getWeatherForecast(zone.name, windowStart + windowShifts * SECONDS_PER_WEATHER_WINDOW).name"
                                                             class="d-block text-center break-word"></span>
                                                     </div>
                                                 </td>
@@ -174,14 +174,15 @@
 
                                     <dt class="col-sm-3 text-end">Location</dt>
                                     <dd class="col-sm-9">
-                                        <div x-text="point.zone"></div>
+                                        <div x-text="point.zone.name"></div>
                                             (<small><strong>X</strong></small>: <span x-text="point.location.x"></span>, 
-                                            <small><strong>Y</strong></small>: <span x-text="point.location.y"></span><template x-if="point.location.z !== undefined"><span>, <small><strong>Z</strong></small>: <span x-text="point.location.z"></span></span></template>)
+                                            <small><strong>Y</strong></small>: <span x-text="point.location.y"></span><template x-if="point.location.z !== undefined"><span>,
+                                            <small><strong>Z</strong></small>: <span x-text="point.location.z"></span></span></template>)
                                     </dd>
 
                                     <dt class="col-sm-3 text-end">Emote</dt>
                                     <dd class="col-sm-9">
-                                        <img :alt="point.emote.command" :src="point.emote.icon" width="20" height="20">&nbsp;<span x-text="point.emote.command"></span>
+                                        <img :alt="point.emote.name" :src="point.emote.icon" width="20" height="20">&nbsp;<span x-text="point.emote.name"></span>
                                     </dd>
 
                                     <dt class="col-sm-3 text-end">Weather</dt>
@@ -213,7 +214,7 @@
     <script type="text/javascript" src="js/chartjs-adapter-date-fns.bundle.min.js"></script>
     <script id="init-bootstrap-tooltip">
         document.addEventListener('DOMContentLoaded', function () {
-            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle=\"tooltip\"]'));
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle=\"tooltip\"]'));
             tooltipTriggerList.forEach(function (tooltipTriggerEl) {
                 new bootstrap.Tooltip(tooltipTriggerEl);
             });
@@ -227,34 +228,17 @@
             'rgba(75, 192, 192, 1)', // green
             'rgba(54, 162, 235, 1)'  // blue
         ];
+        
+        const startUnixSeconds = new Date().getTime() / 1000;
+        const endUnixSeconds = startUnixSeconds + 3 * 60 * 60; // + 6 hours...
 
+        const vistasForGraph = Vista.filter(v => v.zone.region === Region.LA_NOSCEA);
+        const vistaData = buildVistaGraphDataForRange(vistasForGraph, startUnixSeconds, endUnixSeconds);
+        
         const data = {
             datasets: [{
                 label: 'Vistas',
-                data: [
-                    {
-                        number: 1,
-                        eorzeaTime: ['08:00', '12:00'],
-                        x: ['2025-09-03 08:00', '2025-09-03 12:00'],
-                        y: 'Barracuda Piers',
-                        weather: [
-                            {name: 'Fair Skies', icon: 'img/weather/Fair_Skies_icon.png'},
-                            {name: 'Clear Skies', icon: 'img/weather/Clear_Skies_icon.png'}
-                        ],
-                        emote: { command: '/lookout', icon: 'img/emotes/Lookout.png'},
-                        zone: "Limsa Lominsa Upper Decks",
-                        location: { x: 9.5, y: 7.8 }
-                    },
-                    {number: 2,  eorzeaTime: ['08:00', '12:00'], x: ['2025-09-03 18:00', '2025-09-04 05:00'], y: 'The Astalicia',               weather: [{name: 'Fair Skies', icon: 'img/weather/Fair_Skies_icon.png'}, {name: 'Clear Skies', icon: 'img/weather/Clear_Skies_icon.png'}], emote: { command: '/lookout', icon: 'img/emotes/Lookout.png'}, zone: "Limsa Lominsa Lower Decks", location: { x: 7.1, y: 15.1 }},
-                    {number: 3,  eorzeaTime: ['08:00', '12:00'], x: ['2025-09-03 05:00', '2025-09-03 08:00'], y: 'Seasong Grotto',              weather: [{name: 'Rain',       icon: 'img/weather/Rain_icon.png'      }, {name: 'Showers',     icon: 'img/weather/Showers_icon.png'    }], emote: { command: '/pray',    icon: 'img/emotes/Pray.png'   }, zone: "Middle La Noscea",          location: { x: 20.3, y: 19.1 }},
-                    {number: 4,  eorzeaTime: ['08:00', '12:00'], x: ['2025-09-03 12:00', '2025-09-03 17:00'], y: 'The Skylift',                 weather: [{name: 'Fair Skies', icon: 'img/weather/Fair_Skies_icon.png'}, {name: 'Clear Skies', icon: 'img/weather/Clear_Skies_icon.png'}], emote: { command: '/lookout', icon: 'img/emotes/Lookout.png'}, zone: "Middle La Noscea",          location: { x: 16.0, y: 17.3 }},
-                    {number: 5,  eorzeaTime: ['08:00', '12:00'], x: ['2025-09-03 08:00', '2025-09-03 12:00'], y: 'La Thagran Eastroad',         weather: [{name: 'Fair Skies', icon: 'img/weather/Fair_Skies_icon.png'}, {name: 'Clear Skies', icon: 'img/weather/Clear_Skies_icon.png'}], emote: { command: '/lookout', icon: 'img/emotes/Lookout.png'}, zone: "Middle La Noscea",          location: { x: 25.3, y: 27.5 }},
-                    {number: 6,  eorzeaTime: ['08:00', '12:00'], x: ['2025-09-03 18:00', '2025-09-04 05:00'], y: 'The Salt Strand',             weather: [{name: 'Fair Skies', icon: 'img/weather/Fair_Skies_icon.png'}, {name: 'Clear Skies', icon: 'img/weather/Clear_Skies_icon.png'}], emote: { command: '/lookout', icon: 'img/emotes/Lookout.png'}, zone: "Lower La Noscea",           location: { x: 23.1, y: 40.2 }},
-                    {number: 7,  eorzeaTime: ['08:00', '12:00'], x: ['2025-09-03 05:00', '2025-09-03 08:00'], y: 'Red Rooster Stead',           weather: [{name: 'Fair Skies', icon: 'img/weather/Fair_Skies_icon.png'}, {name: 'Clear Skies', icon: 'img/weather/Clear_Skies_icon.png'}], emote: { command: '/lookout', icon: 'img/emotes/Lookout.png'}, zone: "Lower La Noscea",           location: { x: 33.5, y: 19.3 }},
-                    {number: 8,  eorzeaTime: ['08:00', '12:00'], x: ['2025-09-03 05:00', '2025-09-03 08:00'], y: 'Brewer\'s Beacon',            weather: [{name: 'Fair Skies', icon: 'img/weather/Fair_Skies_icon.png'}, {name: 'Clear Skies', icon: 'img/weather/Clear_Skies_icon.png'}], emote: { command: '/lookout', icon: 'img/emotes/Lookout.png'}, zone: "Western La Noscea",         location: { x: 29.9, y: 30.7 }},
-                    {number: 9,  eorzeaTime: ['08:00', '12:00'], x: ['2025-09-03 12:00', '2025-09-03 17:00'], y: 'The Leatherworkers\' Guild',  weather: [{name: 'Fair Skies', icon: 'img/weather/Fair_Skies_icon.png'}, {name: 'Clear Skies', icon: 'img/weather/Clear_Skies_icon.png'}], emote: { command: '/lookout', icon: 'img/emotes/Lookout.png'}, zone: "Old Gridania",              location: { x: 12.8, y: 7.8, z: 1.2 }},
-                    {number: 10, eorzeaTime: ['08:00', '12:00'], x: ['2025-09-03 18:00', '2025-09-04 05:00'], y: 'Apkallu Falls',               weather: [{name: 'Fair Skies', icon: 'img/weather/Fair_Skies_icon.png'}, {name: 'Clear Skies', icon: 'img/weather/Clear_Skies_icon.png'}], emote: { command: '/lookout', icon: 'img/emotes/Lookout.png'}, zone: "Old Gridania",              location: { x: 10.8, y: 6.4 }},
-                ],
+                data: vistaData,
                 backgroundColor: [
                     'rgba(54, 162, 235, 0.2)'
                 ],
@@ -270,8 +254,8 @@
         };
 
         // todayLine plugin
-        const todayLine = {
-            id: 'todayLine',
+        const currentTimeMarker = {
+            id: 'currentTimeMarker',
             afterDatasetsDraw(chart, args, options) {
                 const {ctx, data, chartArea: {top, bottom, left, right}, scales: {x, y}} = chart;
 
@@ -341,79 +325,10 @@
             }
         };
 
-        // status plugin
-        const status = {
-            id: 'status',
-            afterDatasetsDraw(chart, args, pluginOptions) {
-                const {ctx, data, options, chartArea: {top, bottom, left, right}, scales: {x, y}} = chart;
-
-                const icons = ['\uf00d', '\uf110', '\uf00c'];
-                
-                ctx.save();
-                ctx.textBaseline = 'middle';
-                ctx.textAlign = 'center';
-                ctx.font = 'bolder 12px sans-serif';
-                ctx.fillStyle = 'black';
-
-                ctx.fillText('Status', right + 50, top - 18);
-
-                ctx.font = 'bolder 12px FontAwesome';
-
-                data.datasets.forEach((dataset) => {
-                    dataset.data.forEach((datapoint) => {
-                        const yPos = y.getPixelForValue(datapoint.y);
-                        const xEndPos = right + options.layout.padding.right / 2;
-                        ctx.fillStyle = colors[datapoint.status];
-                        ctx.beginPath();
-                        ctx.arc(xEndPos, yPos, 12, 0, 2 * Math.PI, false);
-                        ctx.closePath();
-                        ctx.fill();
-                        ctx.fillStyle = 'white';
-                        ctx.fillText(icons[datapoint.status], xEndPos, yPos);
-                    });
-                });
-
-                ctx.restore();
-            }
-        };
-
-        // weekendHighlight plugin
-        const weekendHighlight = {
-            id: 'weekendHighlight',
-            beforeDatasetsDraw(chart, args, options) {
-                const {ctx, data, chartArea: {top, bottom, left, right, height}, scales: {x, y}} = chart;
-
-                const dayInMs = 24 * 60 * 60 * 1000;
-                const startDate = new Date(x.min);
-                const endDate = new Date(x.max);
-
-                let currentDate = new Date(startDate);
-                currentDate.setHours(0, 0, 0, 0);
-
-                while (currentDate <= endDate) {
-                    const day = currentDate.getDay();
-                    const nextDate = new Date(currentDate);
-                    nextDate.setDate(currentDate.getDate() + 1);
-
-                    if (day === 0 || day === 6) { // Sunday or Saturday
-                        console.log('Highlighting weekend:', currentDate);
-                        const xStart = x.getPixelForValue(currentDate);
-                        const xEnd = x.getPixelForValue(nextDate);
-
-                        ctx.save();
-                        ctx.fillStyle = 'rgba(202, 202, 202, 0.2)';
-                        ctx.fillRect(xStart, top, xEnd - xStart, height);
-                        ctx.restore();
-                    }
-                    currentDate = nextDate;
-                }
-            }
-        };
-
         // config 
         const config = {
             type: 'bar',
-            data,
+            data: data,
             options: { 
                 animation: true,
                 layout: {
@@ -433,8 +348,8 @@
                             day: 'd'
                         },
                     },
-                    min: '2025-09-01',
-                    max: '2025-09-31',
+                    min: new Date(startUnixSeconds * 1000),
+                    max: new Date(endUnixSeconds * 1000),
                     },
                     // y: {
                     //   min: 0,
@@ -444,7 +359,6 @@
                     //            'Task 21', 'Task 22', 'Task 23', 'Task 24', 'Task 25', 'Task 26', 'Task 27', 'Task 28', 'Task 29', 'Task 30',
                     //            'Task 31', 'Task 32', 'Task 33', 'Task 34', 'Task 35', 'Task 36'
                     //           ],
-                    
                     // }
                 },
                 plugins: {
@@ -461,7 +375,7 @@
                     }
                 }
             },
-            plugins: [todayLine, vistaNumber, weekendHighlight]
+            plugins: [currentTimeMarker, vistaNumber]
         };
 
         // render init block
@@ -482,23 +396,23 @@
             }
             const startDate = new Date(year, month-1, 1);
             const endDate = new Date(year, month, 0);
-            myChart.options.scales.x.min = formatDateYyyyMmDd(startDate);
-            myChart.options.scales.x.max = formatDateYyyyMmDd(endDate);
-            console.log(myChart.options.scales.x.min, myChart.options.scales.x.max);
+            myChart.options.scales.x.min = startDate;
+            myChart.options.scales.x.max = endDate;
             myChart.update();
         }
 
-        function formatDateYyyyMmDd(date) {
+        function formatDateYyyyMmDdHHmmss(date) {
             const year = date.getFullYear();
             const month = (date.getMonth() + 1).toString().padStart(2, '0');
             const day = date.getDate().toString().padStart(2, '0');
+            
             return `${year}-${month}-${day}`;
         }
         
         function externalTooltipHandler(context) {
             const { chart, tooltip } = context;
             const tooltipStore = Alpine.store('chartTooltip');
-            const tooltipEl = document.querySelector('.chart-tooltip'); // the Alpine tooltip container
+            const tooltipEl = document.querySelector('.chart-tooltip');
 
             if (!tooltipEl) return;
 
@@ -507,8 +421,6 @@
                 return;
             }
 
-            const canvasRect = chart.canvas.getBoundingClientRect();
-
             // temporarily show offscreen to measure natural size
             tooltipEl.style.display = 'block';
             tooltipEl.style.left = '-9999px';
@@ -516,30 +428,76 @@
             tooltipEl.style['max-width'] = '300px'; // prevent stretching
             tooltipEl.style.width = "max-content";
 
-            const tooltipWidth = tooltipEl.offsetWidth;
-            const tooltipHeight = tooltipEl.offsetHeight;
+            const windowRect = {
+                x: window.scrollX,
+                y: window.scrollY,
+                width: window.innerWidth,
+                height: window.innerHeight
+            };
+
+            const canvasRect = chart.canvas.getBoundingClientRect();
+
+            const caretPos = {
+                x: canvasRect.left + tooltip.caretX,
+                y: canvasRect.top + tooltip.caretY
+            };
 
             // preferred position: centered below point
-            let x = canvasRect.left + tooltip.caretX - tooltipWidth / 2 + window.scrollX;
-            let y = canvasRect.top + tooltip.caretY + 10 + window.scrollY;
+            const tooltipRect = {
+                x: caretPos.x - tooltipEl.offsetWidth / 2 + windowRect.x,
+                y: caretPos.y + 10 + windowRect.y,
+                width: tooltipEl.scrollWidth,
+                height: tooltipEl.scrollHeight
+            };
 
             // flip above if too close to bottom of viewport
-            if (y + tooltipHeight > window.scrollY + window.innerHeight) {
-                y = canvasRect.top + tooltip.caretY - tooltipHeight - 10 + window.scrollY;
-            }
-
             // clamp left/right inside viewport
-            x = Math.max(window.scrollX + 5, Math.min(x, window.scrollX + window.innerWidth - tooltipWidth - 10));
-            y = Math.max(window.scrollY + 5, Math.min(y, window.scrollY + window.innerHeight - tooltipHeight - 10));
+            const adjustedInnerRect = keepRectInsideBounds(flipToolTipToTop(caretPos, tooltipRect, windowRect, 15), windowRect, 15);
 
-            tooltipEl.style.left = `${x}px`;
-            tooltipEl.style.top = `${y}px`;
+            tooltipEl.style.left = `${adjustedInnerRect.x}px`;
+            tooltipEl.style.top = `${adjustedInnerRect.y}px`;
 
             // pass data
             tooltipStore.data = tooltip.dataPoints.map(dp => dp.raw);
             tooltipStore.show = true;
         }
         
+        function flipToolTipToTop(caretPos, tooltipRect, bounds, margin) {
+            margin = margin || 0;
+
+            const adjustedRect = {};
+
+            adjustedRect.x = tooltipRect.x;
+            adjustedRect.y = tooltipRect.y;
+            adjustedRect.width = tooltipRect.width;
+            adjustedRect.height = tooltipRect.height;
+
+            if (adjustedRect.y + adjustedRect.height > bounds.y + bounds.height - margin) {
+                adjustedRect.y = caretPos.y - adjustedRect.height - 10 + bounds.y;
+            }
+
+            return adjustedRect;
+        }
+
+        function keepRectInsideBounds(innerRect, bounds, margin) {
+            margin = margin || 0;
+            
+            const adjustedRect = {};
+
+            adjustedRect.x = constrain(innerRect.x, bounds.x + margin, bounds.x + bounds.width - innerRect.width - margin);
+            adjustedRect.y = constrain(innerRect.y, bounds.y + margin, bounds.y + bounds.height - innerRect.height - margin);
+            adjustedRect.width = innerRect.width;
+            adjustedRect.height = innerRect.height;
+
+            return adjustedRect;
+        }
+
+        function constrain(x, lowBound, highBound) {
+            x = Math.max(x, lowBound);
+            x = Math.min(x, highBound);
+            return x;
+        }
+
         document.addEventListener('alpine:init', () => {
             Alpine.store('chartTooltip', {
                 show: false,

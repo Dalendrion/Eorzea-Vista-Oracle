@@ -460,807 +460,808 @@ var Zone = {
 
 };
 
-var Vista = [{
-    number: "1",
-    name: "Barracuda Piers",
-    area: Zone.LIMSA_LOMINSA_UPPER_DECKS,
-    zone: "Limsa Lominsa Upper Decks",
-    coordinates: { x: 9.5, y: 7.8 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 8, until: 12 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "2",
-    name: "The Astalicia",
-    area: Zone.LIMSA_LOMINSA_LOWER_DECKS,
-    zone: "Limsa Lominsa Lower Decks",
-    coordinates: { x: 7.1, y: 15.1 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 18, until: 5 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "3",
-    name: "Seasong Grotto",
-    area: Zone.MIDDLE_LA_NOSCEA,
-    zone: "Middle La Noscea",
-    coordinates: { x: 20.3, y: 19.1 },
-    weather: [ Weather.RAIN, Weather.SHOWERS ],
-    time: { from: 5, until: 8 },
-    emote: "/pray",
-    completed: false
-},{
-    number: "4",
-    name: "The Skylift",
-    area: Zone.MIDDLE_LA_NOSCEA,
-    zone: "Middle La Noscea",
-    coordinates: { x: 16.0, y: 17.3 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 12, until: 17 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "5",
-    name: "La Thagran Eastroad",
-    area: Zone.MIDDLE_LA_NOSCEA,
-    zone: "Middle La Noscea",
-    coordinates: { x: 25.3, y: 27.5 },
-    weather: [ Weather.CLOUDS ],
-    time: { from: 8, until: 12 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "6",
-    name: "The Salt Strand",
-    area: Zone.LOWER_LA_NOSCEA,
-    zone: "Lower La Noscea",
-    coordinates: { x: 23.1, y: 40.2 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 18, until: 5 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "7",
-    name: "Red Rooster Stead",
-    area: Zone.LOWER_LA_NOSCEA,
-    zone: "Lower La Noscea",
-    coordinates: { x: 33.5, y: 19.3 },
-    weather: [ Weather.FOG ],
-    time: { from: 5, until: 8 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "8",
-    name: "Brewer's Beacon",
-    area: Zone.WESTERN_LA_NOSCEA,
-    zone: "Western La Noscea",
-    coordinates: { x: 29.9, y: 30.7 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 5, until: 8 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "9",
-    name: "The Leatherworkers' Guild",
-    area: Zone.OLD_GRIDANIA,
-    zone: "Old Gridania",
-    coordinates: { x: 12.8, y: 7.8 },
-    weather: [ Weather.CLOUDS ],
-    time: { from: 12, until: 17 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "10",
-    name: "Apkallu Falls",
-    area: Zone.OLD_GRIDANIA,
-    zone: "Old Gridania",
-    coordinates: { x: 10.8, y: 6.4 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 18, until: 5 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "11",
-    name: "Bentbranch Meadows",
-    area: Zone.CENTRAL_SHROUD,
-    zone: "Central Shroud",
-    coordinates: { x: 21.8, y: 21.8 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 12, until: 17 },
-    emote: "/sit",
-    completed: false
-},{
-    number: "12",
-    name: "The Sanctum of the Twelve",
-    area: Zone.EAST_SHROUD,
-    zone: "East Shroud",
-    coordinates: { x: 17.6, y: 18.2 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 8, until: 12 },
-    emote: "/pray",
-    completed: false
-},{
-    number: "13",
-    name: "Little Solace",
-    area: Zone.EAST_SHROUD,
-    zone: "East Shroud",
-    coordinates: { x: 22.3, y: 26.2 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 18, until: 5 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "14",
-    name: "Royal Promenade",
-    area: Zone.ULDAH__STEPS_OF_THAL,
-    zone: "Ul'dah - Steps of Thal",
-    coordinates: { x: 11.1, y: 11.6 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 5, until: 8 },
-    emote: "/salute",
-    completed: false
-},{
-    number: "15",
-    name: "The Gold Court",
-    area: Zone.ULDAH__STEPS_OF_THAL,
-    zone: "Ul'dah - Steps of Thal",
-    coordinates: { x: 11.5, y: 11.2 },
-    weather: [ Weather.CLOUDS ],
-    time: { from: 12, until: 17 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "16",
-    name: "The Jewel of the Desert",
-    area: Zone.WESTERN_THANALAN,
-    zone: "Western Thanalan",
-    coordinates: { x: 22.3, y: 22.3 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 18, until: 5 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "17",
-    name: "The Ruins of Sil'dih",
-    area: Zone.CENTRAL_THANALAN,
-    zone: "Central Thanalan",
-    coordinates: { x: 15.9, y: 22.9 },
-    weather: [ Weather.FOG ],
-    time: { from: 8, until: 12 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "18",
-    name: "The Lonely Giant",
-    area: Zone.EASTERN_THANALAN,
-    zone: "Eastern Thanalan",
-    coordinates: { x: 19.5, y: 24.7 },
-    weather: [ Weather.RAIN, Weather.SHOWERS ],
-    time: { from: 17, until: 18 },
-    emote: "/comfort",
-    completed: false
-},{
-    number: "19",
-    name: "The Invisible City",
-    area: Zone.EASTERN_THANALAN,
-    zone: "Eastern Thanalan",
-    coordinates: { x: 14.3, y: 18.5 },
-    weather: [ Weather.CLOUDS ],
-    time: { from: 8, until: 12 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "20",
-    name: "Highbridge",
-    area: Zone.EASTERN_THANALAN,
-    zone: "Eastern Thanalan",
-    coordinates: { x: 21.0, y: 20.7 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 5, until: 8 },
-    emote: "/pray",
-    completed: false
-},{
-    number: "21",
-    name: "Woad Whisper Canyon",
-    area: Zone.MIDDLE_LA_NOSCEA,
-    zone: "Middle La Noscea",
-    coordinates: { x: 20.0, y: 13.1 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 12, until: 17 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "22",
-    name: "Summerford Farms",
-    area: Zone.MIDDLE_LA_NOSCEA,
-    zone: "Middle La Noscea",
-    coordinates: { x: 25.7, y: 17 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 5, until: 8 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "23",
-    name: "The Grey Fleet",
-    area: Zone.LOWER_LA_NOSCEA,
-    zone: "Lower La Noscea",
-    coordinates: { x: 31.5, y: 12.7 },
-    weather: [ Weather.RAIN, Weather.SHOWERS ],
-    time: { from: 12, until: 17 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "24",
-    name: "Hidden Falls",
-    area: Zone.EASTERN_LA_NOSCEA,
-    zone: "Eastern La Noscea",
-    coordinates: { x: 32.6, y: 23.5 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 8, until: 12 },
-    emote: "/sit",
-    completed: false
-},{
-    number: "25",
-    name: "Gullperch Tower",
-    area: Zone.EASTERN_LA_NOSCEA,
-    zone: "Eastern La Noscea",
-    coordinates: { x: 29.6, y: 33.8 },
-    weather: [ Weather.RAIN, Weather.SHOWERS ],
-    time: { from: 18, until: 5 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "26",
-    name: "The Navigator",
-    area: Zone.WESTERN_LA_NOSCEA,
-    zone: "Western La Noscea",
-    coordinates: { x: 26.9, y: 26.6 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 17, until: 18 },
-    emote: "/pray",
-    completed: false
-},{
-    number: "27",
-    name: "The Ship Graveyard",
-    area: Zone.WESTERN_LA_NOSCEA,
-    zone: "Western La Noscea",
-    coordinates: { x: 17.1, y: 36.2 },
-    weather: [ Weather.GALES ],
-    time: { from: 18, until: 5 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "28",
-    name: "Camp Skull Valley",
-    area: Zone.WESTERN_LA_NOSCEA,
-    zone: "Western La Noscea",
-    coordinates: { x: 22.8, y: 22.4 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 8, until: 12 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "29",
-    name: "Tidegate",
-    area: Zone.WESTERN_LA_NOSCEA,
-    zone: "Western La Noscea",
-    coordinates: { x: 19.4, y: 22.4 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 12, until: 17 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "30",
-    name: "Camp Bronze Lake",
-    area: Zone.UPPER_LA_NOSCEA,
-    zone: "Upper La Noscea",
-    coordinates: { x: 30.8, y: 22.4 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 17, until: 18 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "31",
-    name: "Thalaos",
-    area: Zone.UPPER_LA_NOSCEA,
-    zone: "Upper La Noscea",
-    coordinates: { x: 12.9, y: 22.0 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 12, until: 17 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "32",
-    name: "Jijiroon's Trading Post",
-    area: Zone.UPPER_LA_NOSCEA,
-    zone: "Upper La Noscea",
-    coordinates: { x: 29.1, y: 25.4 },
-    weather: [ Weather.THUNDERSTORMS ],
-    time: { from: 18, until: 5 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "33",
-    name: "The Floating City of Nym",
-    area: Zone.OUTER_LA_NOSCEA,
-    zone: "Outer La Noscea",
-    coordinates: { x: 12.7, y: 15.1 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 18, until: 5 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "34",
-    name: "Camp Overlook",
-    area: Zone.OUTER_LA_NOSCEA,
-    zone: "Outer La Noscea",
-    coordinates: { x: 17.1, y: 16.3, z: 0.8 },
-    weather: [ Weather.CLOUDS ],
-    time: { from: 5, until: 8 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "35",
-    name: "U'Ghamaro Mines",
-    area: Zone.OUTER_LA_NOSCEA,
-    zone: "Outer La Noscea",
-    coordinates: { x: 23.4, y: 11.7, z: 0.7 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 12, until: 17 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "36",
-    name: "The Hermit's Hovel",
-    area: Zone.OUTER_LA_NOSCEA,
-    zone: "Outer La Noscea",
-    coordinates: { x: 15.4, y: 10.1 },
-    weather: [ Weather.RAIN, Weather.SHOWERS ],
-    time: { from: 18, until: 5 },
-    emote: "/sit",
-    completed: false
-},{
-    number: "37",
-    name: "The Carline Canopy",
-    area: Zone.NEW_GRIDANIA,
-    zone: "New Gridania",
-    coordinates: { x: 14.3, y: 14.3 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 8, until: 12 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "38",
-    name: "The Lancer's Guild",
-    area: Zone.OLD_GRIDANIA,
-    zone: "Old Gridania",
-    coordinates: { x: 14.2, y: 5.9 },
-    weather: [ Weather.RAIN, Weather.SHOWERS ],
-    time: { from: 5, until: 8 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "39",
-    name: "The Bannock",
-    area: Zone.CENTRAL_SHROUD,
-    zone: "Central Shroud",
-    coordinates: { x: 23.4, y: 19.9 },
-    weather: [ Weather.RAIN, Weather.SHOWERS ],
-    time: { from: 5, until: 8 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "40",
-    name: "Haukke Manor",
-    area: Zone.CENTRAL_SHROUD,
-    zone: "Central Shroud",
-    coordinates: { x: 13.6, y: 23.1 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 18, until: 5 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "41",
-    name: "The Guardian Tree",
-    area: Zone.CENTRAL_SHROUD,
-    zone: "Central Shroud",
-    coordinates: { x: 16.3, y: 22.3 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 12, until: 17 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "42",
-    name: "Rainbow Bridge",
-    area: Zone.CENTRAL_SHROUD,
-    zone: "Central Shroud",
-    coordinates: { x: 26.5, y: 18.8 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 11, until: 13 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "43",
-    name: "The Seedbed",
-    area: Zone.EAST_SHROUD,
-    zone: "East Shroud",
-    coordinates: { x: 20.9, y: 10.7 },
-    weather: [ Weather.THUNDER ],
-    time: { from: 18, until: 5 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "44",
-    name: "Buscarron's Druthers",
-    area: Zone.SOUTH_SHROUD,
-    zone: "South Shroud",
-    coordinates: { x: 17.8, y: 20.1 },
-    weather: [ Weather.THUNDERSTORMS ],
-    time: { from: 8, until: 12 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "45",
-    name: "South Shroud Landing",
-    area: Zone.SOUTH_SHROUD,
-    zone: "South Shroud",
-    coordinates: { x: 14.7, y: 33.9 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 8, until: 12 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "46",
-    name: "Urth's Gift",
-    area: Zone.SOUTH_SHROUD,
-    zone: "South Shroud",
-    coordinates: { x: 33.3, y: 23.9 },
-    weather: [ Weather.FOG ],
-    time: { from: 12, until: 17 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "47",
-    name: "Quarrymill",
-    area: Zone.SOUTH_SHROUD,
-    zone: "South Shroud",
-    coordinates: { x: 25.4, y: 21.1 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 5, until: 8 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "48",
-    name: "Ixali Logging Grounds",
-    area: Zone.NORTH_SHROUD,
-    zone: "North Shroud",
-    coordinates: { x: 18.4, y: 19.5 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 12, until: 17 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "49",
-    name: "Fallen Neurolink",
-    area: Zone.NORTH_SHROUD,
-    zone: "North Shroud",
-    coordinates: { x: 15.8, y: 32.0 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 18, until: 5 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "50",
-    name: "Alder Springs",
-    area: Zone.NORTH_SHROUD,
-    zone: "North Shroud",
-    coordinates: { x: 15.4, y: 27.2 },
-    weather: [ Weather.CLOUDS ],
-    time: { from: 8, until: 12 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "51",
-    name: "Castrum Marinum",
-    area: Zone.WESTERN_THANALAN,
-    zone: "Western Thanalan",
-    coordinates: { x: 8.7, y: 5.2 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 17, until: 18 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "52",
-    name: "Vesper Bay",
-    area: Zone.WESTERN_THANALAN,
-    zone: "Western Thanalan",
-    coordinates: { x: 12.4, y: 14.8 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 12, until: 17 },
-    emote: "/point",
-    completed: false
-},{
-    number: "53",
-    name: "Black Brush Station",
-    area: Zone.CENTRAL_THANALAN,
-    zone: "Central Thanalan",
-    coordinates: { x: 21.4, y: 17.5 },
-    weather: [ Weather.DUST_STORMS ],
-    time: { from: 18, until: 5 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "54",
-    name: "Gate of Nald",
-    area: Zone.CENTRAL_THANALAN,
-    zone: "Central Thanalan",
-    coordinates: { x: 18.5, y: 26.1 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 12, until: 17 },
-    emote: "/sit",
-    completed: false
-},{
-    number: "55",
-    name: "The Burning Wall",
-    area: Zone.EASTERN_THANALAN,
-    zone: "Eastern Thanalan",
-    coordinates: { x: 30.7, y: 26.5 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 12, until: 17 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "56",
-    name: "The Golden Bazaar",
-    area: Zone.EASTERN_THANALAN,
-    zone: "Eastern Thanalan",
-    coordinates: { x: 10.0, y: 16.7 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 8, until: 12 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "57",
-    name: "Thal's Respite",
-    area: Zone.EASTERN_THANALAN,
-    zone: "Eastern Thanalan",
-    coordinates: { x: 25.2, y: 14.7 },
-    weather: [ Weather.SHOWERS ],
-    time: { from: 18, until: 5 },
-    emote: "/pray",
-    completed: false
-},{
-    number: "58",
-    name: "Nald's Reflection",
-    area: Zone.SOUTHERN_THANALAN,
-    zone: "Southern Thanalan",
-    coordinates: { x: 12.2, y: 22.9 },
-    weather: [ Weather.FOG ],
-    time: { from: 5, until: 8 },
-    emote: "/pray",
-    completed: false
-},{
-    number: "59",
-    name: "Zahar'ak",
-    area: Zone.SOUTHERN_THANALAN,
-    zone: "Southern Thanalan",
-    coordinates: { x: 19.3, y: 20.5 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 5, until: 8 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "60",
-    name: "The Sagolii Desert",
-    area: Zone.SOUTHERN_THANALAN,
-    zone: "Southern Thanalan",
-    coordinates: { x: 21.3, y: 38.6 },
-    weather: [ Weather.HEAT_WAVES ],
-    time: { from: 12, until: 17 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "61",
-    name: "The Sunken Temple of Qarn",
-    area: Zone.SOUTHERN_THANALAN,
-    zone: "Southern Thanalan",
-    coordinates: { x: 23.8, y: 11.8 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 12, until: 17 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "62",
-    name: "Minotaur Malm",
-    area: Zone.SOUTHERN_THANALAN,
-    zone: "Southern Thanalan",
-    coordinates: { x: 14.6, y: 26.5 },
-    weather: [ Weather.HEAT_WAVES ],
-    time: { from: 5, until: 8 },
-    emote: "/psych",
-    completed: false
-},{
-    number: "63",
-    name: "East Watchtower",
-    area: Zone.NORTHERN_THANALAN,
-    zone: "Northern Thanalan",
-    coordinates: { x: 22.2, y: 25.7 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 5, until: 8 },
-    emote: "/salute",
-    completed: false
-},{
-    number: "64",
-    name: "Ceruleum Pipeline",
-    area: Zone.NORTHERN_THANALAN,
-    zone: "Northern Thanalan",
-    coordinates: { x: 20.6, y: 29.5, z: 0.5 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 18, until: 5 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "65",
-    name: "Bluefog",
-    area: Zone.NORTHERN_THANALAN,
-    zone: "Northern Thanalan",
-    coordinates: { x: 20.8, y: 22.5 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 12, until: 17 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "66",
-    name: "Raubahn's Push",
-    area: Zone.NORTHERN_THANALAN,
-    zone: "Northern Thanalan",
-    coordinates: { x: 20.0, y: 17.7 },
-    weather: [ Weather.CLOUDS ],
-    time: { from: 8, until: 12 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "67",
-    name: "Abandoned Amajina Mythril Mine",
-    area: Zone.NORTHERN_THANALAN,
-    zone: "Northern Thanalan",
-    coordinates: { x: 26.4, y: 22.7 },
-    weather: [ Weather.FOG ],
-    time: { from: 18, until: 5 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "68",
-    name: "The Nail",
-    area: Zone.COERTHAS_CENTRAL_HIGHLANDS,
-    zone: "Coerthas Central Highlands",
-    coordinates: { x: 25.4, y: 29.9 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 17, until: 18 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "69",
-    name: "The Observatorium",
-    area: Zone.COERTHAS_CENTRAL_HIGHLANDS,
-    zone: "Coerthas Central Highlands",
-    coordinates: { x: 25.5, y: 29.8 },
-    weather: [ Weather.FOG ],
-    time: { from: 18, until: 5 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "70",
-    name: "The Frozen Fang",
-    area: Zone.COERTHAS_CENTRAL_HIGHLANDS,
-    zone: "Coerthas Central Highlands",
-    coordinates: { x: 11.7, y: 15.8 },
-    weather: [ Weather.BLIZZARDS ],
-    time: { from: 8, until: 12 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "71",
-    name: "The Holy See of Ishgard",
-    area: Zone.COERTHAS_CENTRAL_HIGHLANDS,
-    zone: "Coerthas Central Highlands",
-    coordinates: { x: 12.8, y: 17.3, z: 1.4 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 5, until: 8 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "72",
-    name: "Boulder Downs",
-    area: Zone.COERTHAS_CENTRAL_HIGHLANDS,
-    zone: "Coerthas Central Highlands",
-    coordinates: { x: 7.8, y: 28.9, z: 1.8 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 17, until: 18 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "73",
-    name: "The Fury's Gaze",
-    area: Zone.COERTHAS_CENTRAL_HIGHLANDS,
-    zone: "Coerthas Central Highlands",
-    coordinates: { x: 7.9, y: 31.3 },
-    weather: [ Weather.BLIZZARDS, Weather.SNOW ],
-    time: { from: 18, until: 5 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "74",
-    name: "Snowcloak",
-    area: Zone.COERTHAS_CENTRAL_HIGHLANDS,
-    zone: "Coerthas Central Highlands",
-    coordinates: { x: 2.2, y: 21.4 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 8, until: 12 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "75",
-    name: "Camp Dragonhead",
-    area: Zone.COERTHAS_CENTRAL_HIGHLANDS,
-    zone: "Coerthas Central Highlands",
-    coordinates: { x: 26.5, y: 17.7 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 12, until: 17 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "76",
-    name: "The Steel Vigil",
-    area: Zone.COERTHAS_CENTRAL_HIGHLANDS,
-    zone: "Coerthas Central Highlands",
-    coordinates: { x: 28.2, y: 10.3 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 5, until: 8 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "77",
-    name: "Castrum Centri",
-    area: Zone.MOR_DHONA,
-    zone: "Mor Dhona",
-    coordinates: { x: 9.8, y: 13.5 },
-    weather: [ Weather.GLOOM ],
-    time: { from: 12, until: 17 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "78",
-    name: "The Crystal Tower",
-    area: Zone.MOR_DHONA,
-    zone: "Mor Dhona",
-    coordinates: { x: 27.4, y: 8.0, z: 0.6 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 18, until: 5 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "79",
-    name: "Rathefrost",
-    area: Zone.MOR_DHONA,
-    zone: "Mor Dhona",
-    coordinates: { x: 18.6, y: 17.7 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 12, until: 17 },
-    emote: "/lookout",
-    completed: false
-},{
-    number: "80",
-    name: "The Keeper of the Lake",
-    area: Zone.MOR_DHONA,
-    zone: "Mor Dhona",
-    coordinates: { x: 26.1, y: 11.2 },
-    weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
-    time: { from: 17, until: 18 },
-    emote: "/sit",
-    completed: false
-}];
+var Vista = [
+    {
+        number: "1",
+        name: "Barracuda Piers",
+        zone: Zone.LIMSA_LOMINSA_UPPER_DECKS,
+        coordinates: { x: 9.5, y: 7.8 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 8, until: 12 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "2",
+        name: "The Astalicia",
+        zone: Zone.LIMSA_LOMINSA_LOWER_DECKS,
+        coordinates: { x: 7.1, y: 15.1 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 18, until: 5 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "3",
+        name: "Seasong Grotto",
+        zone: Zone.MIDDLE_LA_NOSCEA,
+        coordinates: { x: 20.3, y: 19.1 },
+        weather: [ Weather.RAIN, Weather.SHOWERS ],
+        time: { from: 5, until: 8 },
+        emote: "Pray",
+        completed: false
+    },
+    {
+        number: "4",
+        name: "The Skylift",
+        zone: Zone.MIDDLE_LA_NOSCEA,
+        coordinates: { x: 16.0, y: 17.3 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 12, until: 17 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "5",
+        name: "La Thagran Eastroad",
+        zone: Zone.MIDDLE_LA_NOSCEA,
+        coordinates: { x: 25.3, y: 27.5 },
+        weather: [ Weather.CLOUDS ],
+        time: { from: 8, until: 12 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "6",
+        name: "The Salt Strand",
+        zone: Zone.LOWER_LA_NOSCEA,
+        coordinates: { x: 23.1, y: 40.2 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 18, until: 5 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "7",
+        name: "Red Rooster Stead",
+        zone: Zone.LOWER_LA_NOSCEA,
+        coordinates: { x: 33.5, y: 19.3 },
+        weather: [ Weather.FOG ],
+        time: { from: 5, until: 8 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "8",
+        name: "Brewer's Beacon",
+        zone: Zone.WESTERN_LA_NOSCEA,
+        coordinates: { x: 29.9, y: 30.7 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 5, until: 8 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "9",
+        name: "The Leatherworkers' Guild",
+        zone: Zone.OLD_GRIDANIA,
+        coordinates: { x: 12.8, y: 7.8 },
+        weather: [ Weather.CLOUDS ],
+        time: { from: 12, until: 17 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "10",
+        name: "Apkallu Falls",
+        zone: Zone.OLD_GRIDANIA,
+        coordinates: { x: 10.8, y: 6.4 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 18, until: 5 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "11",
+        name: "Bentbranch Meadows",
+        zone: Zone.CENTRAL_SHROUD,
+        coordinates: { x: 21.8, y: 21.8 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 12, until: 17 },
+        emote: "Sit",
+        completed: false
+    },
+    {
+        number: "12",
+        name: "The Sanctum of the Twelve",
+        zone: Zone.EAST_SHROUD,
+        coordinates: { x: 17.6, y: 18.2 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 8, until: 12 },
+        emote: "Pray",
+        completed: false
+    },
+    {
+        number: "13",
+        name: "Little Solace",
+        zone: Zone.EAST_SHROUD,
+        coordinates: { x: 22.3, y: 26.2 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 18, until: 5 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "14",
+        name: "Royal Promenade",
+        zone: Zone.ULDAH_STEPS_OF_THAL,
+        coordinates: { x: 11.1, y: 11.6 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 5, until: 8 },
+        emote: "Salute",
+        completed: false
+    },
+    {
+        number: "15",
+        name: "The Gold Court",
+        zone: Zone.ULDAH_STEPS_OF_THAL,
+        coordinates: { x: 11.5, y: 11.2 },
+        weather: [ Weather.CLOUDS ],
+        time: { from: 12, until: 17 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "16",
+        name: "The Jewel of the Desert",
+        zone: Zone.WESTERN_THANALAN,
+        coordinates: { x: 22.3, y: 22.3 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 18, until: 5 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "17",
+        name: "The Ruins of Sil'dih",
+        zone: Zone.CENTRAL_THANALAN,
+        coordinates: { x: 15.9, y: 22.9 },
+        weather: [ Weather.FOG ],
+        time: { from: 8, until: 12 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "18",
+        name: "The Lonely Giant",
+        zone: Zone.EASTERN_THANALAN,
+        coordinates: { x: 19.5, y: 24.7 },
+        weather: [ Weather.RAIN, Weather.SHOWERS ],
+        time: { from: 17, until: 18 },
+        emote: "Comfort",
+        completed: false
+    },
+    {
+        number: "19",
+        name: "The Invisible City",
+        zone: Zone.EASTERN_THANALAN,
+        coordinates: { x: 14.3, y: 18.5 },
+        weather: [ Weather.CLOUDS ],
+        time: { from: 8, until: 12 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "20",
+        name: "Highbridge",
+        zone: Zone.EASTERN_THANALAN,
+        coordinates: { x: 21.0, y: 20.7 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 5, until: 8 },
+        emote: "Pray",
+        completed: false
+    },
+    {
+        number: "21",
+        name: "Woad Whisper Canyon",
+        zone: Zone.MIDDLE_LA_NOSCEA,
+        coordinates: { x: 20.0, y: 13.1 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 12, until: 17 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "22",
+        name: "Summerford Farms",
+        zone: Zone.MIDDLE_LA_NOSCEA,
+        coordinates: { x: 25.7, y: 17 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 5, until: 8 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "23",
+        name: "The Grey Fleet",
+        zone: Zone.LOWER_LA_NOSCEA,
+        coordinates: { x: 31.5, y: 12.7 },
+        weather: [ Weather.RAIN, Weather.SHOWERS ],
+        time: { from: 12, until: 17 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "24",
+        name: "Hidden Falls",
+        zone: Zone.EASTERN_LA_NOSCEA,
+        coordinates: { x: 32.6, y: 23.5 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 8, until: 12 },
+        emote: "Sit",
+        completed: false
+    },
+    {
+        number: "25",
+        name: "Gullperch Tower",
+        zone: Zone.EASTERN_LA_NOSCEA,
+        coordinates: { x: 29.6, y: 33.8 },
+        weather: [ Weather.RAIN, Weather.SHOWERS ],
+        time: { from: 18, until: 5 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "26",
+        name: "The Navigator",
+        zone: Zone.WESTERN_LA_NOSCEA,
+        coordinates: { x: 26.9, y: 26.6 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 17, until: 18 },
+        emote: "Pray",
+        completed: false
+    },
+    {
+        number: "27",
+        name: "The Ship Graveyard",
+        zone: Zone.WESTERN_LA_NOSCEA,
+        coordinates: { x: 17.1, y: 36.2 },
+        weather: [ Weather.GALES ],
+        time: { from: 18, until: 5 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "28",
+        name: "Camp Skull Valley",
+        zone: Zone.WESTERN_LA_NOSCEA,
+        coordinates: { x: 22.8, y: 22.4 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 8, until: 12 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "29",
+        name: "Tidegate",
+        zone: Zone.WESTERN_LA_NOSCEA,
+        coordinates: { x: 19.4, y: 22.4 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 12, until: 17 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "30",
+        name: "Camp Bronze Lake",
+        zone: Zone.UPPER_LA_NOSCEA,
+        coordinates: { x: 30.8, y: 22.4 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 17, until: 18 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "31",
+        name: "Thalaos",
+        zone: Zone.UPPER_LA_NOSCEA,
+        coordinates: { x: 12.9, y: 22.0 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 12, until: 17 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "32",
+        name: "Jijiroon's Trading Post",
+        zone: Zone.UPPER_LA_NOSCEA,
+        coordinates: { x: 29.1, y: 25.4 },
+        weather: [ Weather.THUNDERSTORMS ],
+        time: { from: 18, until: 5 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "33",
+        name: "The Floating City of Nym",
+        zone: Zone.OUTER_LA_NOSCEA,
+        coordinates: { x: 12.7, y: 15.1 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 18, until: 5 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "34",
+        name: "Camp Overlook",
+        zone: Zone.OUTER_LA_NOSCEA,
+        coordinates: { x: 17.1, y: 16.3, z: 0.8 },
+        weather: [ Weather.CLOUDS ],
+        time: { from: 5, until: 8 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "35",
+        name: "U'Ghamaro Mines",
+        zone: Zone.OUTER_LA_NOSCEA,
+        coordinates: { x: 23.4, y: 11.7, z: 0.7 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 12, until: 17 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "36",
+        name: "The Hermit's Hovel",
+        zone: Zone.OUTER_LA_NOSCEA,
+        coordinates: { x: 15.4, y: 10.1 },
+        weather: [ Weather.RAIN, Weather.SHOWERS ],
+        time: { from: 18, until: 5 },
+        emote: "Sit",
+        completed: false
+    },
+    {
+        number: "37",
+        name: "The Carline Canopy",
+        zone: Zone.NEW_GRIDANIA,
+        coordinates: { x: 14.3, y: 14.3 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 8, until: 12 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "38",
+        name: "The Lancer's Guild",
+        zone: Zone.OLD_GRIDANIA,
+        coordinates: { x: 14.2, y: 5.9 },
+        weather: [ Weather.RAIN, Weather.SHOWERS ],
+        time: { from: 5, until: 8 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "39",
+        name: "The Bannock",
+        zone: Zone.CENTRAL_SHROUD,
+        coordinates: { x: 23.4, y: 19.9 },
+        weather: [ Weather.RAIN, Weather.SHOWERS ],
+        time: { from: 5, until: 8 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "40",
+        name: "Haukke Manor",
+        zone: Zone.CENTRAL_SHROUD,
+        coordinates: { x: 13.6, y: 23.1 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 18, until: 5 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "41",
+        name: "The Guardian Tree",
+        zone: Zone.CENTRAL_SHROUD,
+        coordinates: { x: 16.3, y: 22.3 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 12, until: 17 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "42",
+        name: "Rainbow Bridge",
+        zone: Zone.CENTRAL_SHROUD,
+        coordinates: { x: 26.5, y: 18.8 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 11, until: 13 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "43",
+        name: "The Seedbed",
+        zone: Zone.EAST_SHROUD,
+        coordinates: { x: 20.9, y: 10.7 },
+        weather: [ Weather.THUNDER ],
+        time: { from: 18, until: 5 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "44",
+        name: "Buscarron's Druthers",
+        zone: Zone.SOUTH_SHROUD,
+        coordinates: { x: 17.8, y: 20.1 },
+        weather: [ Weather.THUNDERSTORMS ],
+        time: { from: 8, until: 12 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "45",
+        name: "South Shroud Landing",
+        zone: Zone.SOUTH_SHROUD,
+        coordinates: { x: 14.7, y: 33.9 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 8, until: 12 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "46",
+        name: "Urth's Gift",
+        zone: Zone.SOUTH_SHROUD,
+        coordinates: { x: 33.3, y: 23.9 },
+        weather: [ Weather.FOG ],
+        time: { from: 12, until: 17 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "47",
+        name: "Quarrymill",
+        zone: Zone.SOUTH_SHROUD,
+        coordinates: { x: 25.4, y: 21.1 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 5, until: 8 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "48",
+        name: "Ixali Logging Grounds",
+        zone: Zone.NORTH_SHROUD,
+        coordinates: { x: 18.4, y: 19.5 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 12, until: 17 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "49",
+        name: "Fallen Neurolink",
+        zone: Zone.NORTH_SHROUD,
+        coordinates: { x: 15.8, y: 32.0 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 18, until: 5 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "50",
+        name: "Alder Springs",
+        zone: Zone.NORTH_SHROUD,
+        coordinates: { x: 15.4, y: 27.2 },
+        weather: [ Weather.CLOUDS ],
+        time: { from: 8, until: 12 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "51",
+        name: "Castrum Marinum",
+        zone: Zone.WESTERN_THANALAN,
+        coordinates: { x: 8.7, y: 5.2 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 17, until: 18 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "52",
+        name: "Vesper Bay",
+        zone: Zone.WESTERN_THANALAN,
+        coordinates: { x: 12.4, y: 14.8 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 12, until: 17 },
+        emote: "Point",
+        completed: false
+    },
+    {
+        number: "53",
+        name: "Black Brush Station",
+        zone: Zone.CENTRAL_THANALAN,
+        coordinates: { x: 21.4, y: 17.5 },
+        weather: [ Weather.DUST_STORMS ],
+        time: { from: 18, until: 5 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "54",
+        name: "Gate of Nald",
+        zone: Zone.CENTRAL_THANALAN,
+        coordinates: { x: 18.5, y: 26.1 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 12, until: 17 },
+        emote: "Sit",
+        completed: false
+    },
+    {
+        number: "55",
+        name: "The Burning Wall",
+        zone: Zone.EASTERN_THANALAN,
+        coordinates: { x: 30.7, y: 26.5 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 12, until: 17 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "56",
+        name: "The Golden Bazaar",
+        zone: Zone.EASTERN_THANALAN,
+        coordinates: { x: 10.0, y: 16.7 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 8, until: 12 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "57",
+        name: "Thal's Respite",
+        zone: Zone.EASTERN_THANALAN,
+        coordinates: { x: 25.2, y: 14.7 },
+        weather: [ Weather.SHOWERS ],
+        time: { from: 18, until: 5 },
+        emote: "Pray",
+        completed: false
+    },
+    {
+        number: "58",
+        name: "Nald's Reflection",
+        zone: Zone.SOUTHERN_THANALAN,
+        coordinates: { x: 12.2, y: 22.9 },
+        weather: [ Weather.FOG ],
+        time: { from: 5, until: 8 },
+        emote: "Pray",
+        completed: false
+    },
+    {
+        number: "59",
+        name: "Zahar'ak",
+        zone: Zone.SOUTHERN_THANALAN,
+        coordinates: { x: 19.3, y: 20.5 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 5, until: 8 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "60",
+        name: "The Sagolii Desert",
+        zone: Zone.SOUTHERN_THANALAN,
+        coordinates: { x: 21.3, y: 38.6 },
+        weather: [ Weather.HEAT_WAVES ],
+        time: { from: 12, until: 17 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "61",
+        name: "The Sunken Temple of Qarn",
+        zone: Zone.SOUTHERN_THANALAN,
+        coordinates: { x: 23.8, y: 11.8 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 12, until: 17 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "62",
+        name: "Minotaur Malm",
+        zone: Zone.SOUTHERN_THANALAN,
+        coordinates: { x: 14.6, y: 26.5 },
+        weather: [ Weather.HEAT_WAVES ],
+        time: { from: 5, until: 8 },
+        emote: "Psych",
+        completed: false
+    },
+    {
+        number: "63",
+        name: "East Watchtower",
+        zone: Zone.NORTHERN_THANALAN,
+        coordinates: { x: 22.2, y: 25.7 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 5, until: 8 },
+        emote: "Salute",
+        completed: false
+    },
+    {
+        number: "64",
+        name: "Ceruleum Pipeline",
+        zone: Zone.NORTHERN_THANALAN,
+        coordinates: { x: 20.6, y: 29.5, z: 0.5 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 18, until: 5 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "65",
+        name: "Bluefog",
+        zone: Zone.NORTHERN_THANALAN,
+        coordinates: { x: 20.8, y: 22.5 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 12, until: 17 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "66",
+        name: "Raubahn's Push",
+        zone: Zone.NORTHERN_THANALAN,
+        coordinates: { x: 20.0, y: 17.7 },
+        weather: [ Weather.CLOUDS ],
+        time: { from: 8, until: 12 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "67",
+        name: "Abandoned Amajina Mythril Mine",
+        zone: Zone.NORTHERN_THANALAN,
+        coordinates: { x: 26.4, y: 22.7 },
+        weather: [ Weather.FOG ],
+        time: { from: 18, until: 5 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "68",
+        name: "The Nail",
+        zone: Zone.COERTHAS_CENTRAL_HIGHLANDS,
+        coordinates: { x: 25.4, y: 29.9 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 17, until: 18 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "69",
+        name: "The Observatorium",
+        zone: Zone.COERTHAS_CENTRAL_HIGHLANDS,
+        coordinates: { x: 25.5, y: 29.8 },
+        weather: [ Weather.FOG ],
+        time: { from: 18, until: 5 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "70",
+        name: "The Frozen Fang",
+        zone: Zone.COERTHAS_CENTRAL_HIGHLANDS,
+        coordinates: { x: 11.7, y: 15.8 },
+        weather: [ Weather.BLIZZARDS ],
+        time: { from: 8, until: 12 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "71",
+        name: "The Holy See of Ishgard",
+        zone: Zone.COERTHAS_CENTRAL_HIGHLANDS,
+        coordinates: { x: 12.8, y: 17.3, z: 1.4 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 5, until: 8 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "72",
+        name: "Boulder Downs",
+        zone: Zone.COERTHAS_CENTRAL_HIGHLANDS,
+        coordinates: { x: 7.8, y: 28.9, z: 1.8 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 17, until: 18 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "73",
+        name: "The Fury's Gaze",
+        zone: Zone.COERTHAS_CENTRAL_HIGHLANDS,
+        coordinates: { x: 7.9, y: 31.3 },
+        weather: [ Weather.BLIZZARDS, Weather.SNOW ],
+        time: { from: 18, until: 5 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "74",
+        name: "Snowcloak",
+        zone: Zone.COERTHAS_CENTRAL_HIGHLANDS,
+        coordinates: { x: 2.2, y: 21.4 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 8, until: 12 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "75",
+        name: "Camp Dragonhead",
+        zone: Zone.COERTHAS_CENTRAL_HIGHLANDS,
+        coordinates: { x: 26.5, y: 17.7 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 12, until: 17 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "76",
+        name: "The Steel Vigil",
+        zone: Zone.COERTHAS_CENTRAL_HIGHLANDS,
+        coordinates: { x: 28.2, y: 10.3 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 5, until: 8 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "77",
+        name: "Castrum Centri",
+        zone: Zone.MOR_DHONA,
+        coordinates: { x: 9.8, y: 13.5 },
+        weather: [ Weather.GLOOM ],
+        time: { from: 12, until: 17 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "78",
+        name: "The Crystal Tower",
+        zone: Zone.MOR_DHONA,
+        coordinates: { x: 27.4, y: 8.0, z: 0.6 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 18, until: 5 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "79",
+        name: "Rathefrost",
+        zone: Zone.MOR_DHONA,
+        coordinates: { x: 18.6, y: 17.7 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 12, until: 17 },
+        emote: "Lookout",
+        completed: false
+    },
+    {
+        number: "80",
+        name: "The Keeper of the Lake",
+        zone: Zone.MOR_DHONA,
+        coordinates: { x: 26.1, y: 11.2 },
+        weather: [ Weather.FAIR_SKIES, Weather.CLEAR_SKIES ],
+        time: { from: 17, until: 18 },
+        emote: "Sit",
+        completed: false
+    }
+];
 
 var weatherTables = (function() {
     var weatherTables = {};
