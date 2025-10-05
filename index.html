@@ -44,7 +44,8 @@
         },
         isVistaAvailable(vista, slot) {
             return true;
-        }
+        },
+        hideCompletedVistas: false,
     }"
     x-init="setInterval(() => { updateTimes() }, 1000)">
         
@@ -154,6 +155,12 @@
     
                     <div class="chartBox">
                         <div class="chart-container" style="position: relative; height: 2000px;">
+                            <div class="form-check mb-2" x-data="vistaChart">
+                                <input class="form-check-input" type="checkbox" id="hideCompleted" x-model="hideCompleted">
+                                <label class="form-check-label" for="hideCompleted">
+                                    Hide Completed Vistas
+                                </label>
+                            </div>
                             <canvas id="myChart"></canvas>
                             <div id="vistaCheckboxesOverlay" style="position:absolute; top:0; left:0; pointer-events:none;"></div>
                         </div>
@@ -225,6 +232,17 @@
         const startUnixSeconds = Math.floor(new Date().getTime() / 1000 / SECONDS_PER_WEATHER_WINDOW) * SECONDS_PER_WEATHER_WINDOW;
         const endUnixSeconds = startUnixSeconds + 9 * SECONDS_PER_WEATHER_WINDOW;
 
+        // restore completed statues
+        const savedCompleted = localStorage.getItem('vistaCompleted');
+        if (savedCompleted) {
+            const completedArray = JSON.parse(savedCompleted);
+            completedArray.forEach((status, i) => {
+                if (Vista[i]) {
+                    Vista[i].completed = status;
+                }
+            });
+        }
+
         const vistasForGraph = Vista;
         const vistaData = buildVistaGraphDataForRange(vistasForGraph, startUnixSeconds, endUnixSeconds);
         
@@ -249,7 +267,8 @@
         // vistaCheckbox plugin
         const vistaCheckboxPlugin = {
             id: 'vistaCheckboxPlugin',
-            afterRender(chart) {
+
+            beforeDraw(chart) {
                 let overlay = document.getElementById('vistaCheckboxesOverlay');
                 if (!overlay) {
                     overlay = document.createElement('div');
@@ -260,18 +279,22 @@
                     chart.canvas.parentNode.appendChild(overlay);
                 }
 
+                // size & position overlay
                 const rect = chart.canvas.getBoundingClientRect();
                 overlay.style.width = rect.width + 'px';
                 overlay.style.height = rect.height + 'px';
                 overlay.style.top = chart.canvas.offsetTop + 'px';
                 overlay.style.left = chart.canvas.offsetLeft + 'px';
-                overlay.innerHTML = '';
+                overlay.innerHTML = ''; // clear previous checkboxes
 
                 const yScale = chart.scales.y;
                 const tickCount = yScale.ticks.length;
+                const filtered = chart.filteredVistas || Vista;
 
                 for (let i = 0; i < tickCount; i++) {
+                    const vista = filtered[i];
                     const tick = yScale.ticks[i];
+                    tick.vistaNumber = vista.number; // store the original vista number
                     const y = yScale.getPixelForTick(i);
 
                     const wrapper = document.createElement('div');
@@ -284,9 +307,24 @@
                     const checkbox = document.createElement('input');
                     checkbox.className = 'form-check-input';
                     checkbox.type = 'checkbox';
-                    checkbox.checked = true;
-                    checkbox.id = `vistaCheckbox-${tick.value}`;
-                    checkbox.value = tick.value;
+                    checkbox.id = `vistaCheckbox-${tick.vistaNumber}`;
+                    checkbox.value = tick.vistaNumber;
+
+                    // set initial checked state from the original Vista array
+                    const originalVista = Vista.find(v => v.number === tick.vistaNumber);
+                    checkbox.checked = originalVista?.completed || false;
+
+                    // update Vista.completed on toggle
+                    checkbox.addEventListener('change', () => {
+                        if (originalVista) originalVista.completed = checkbox.checked;
+                        localStorage.setItem('vistaCompleted', JSON.stringify(Vista.map(v => v.completed)));
+
+                        // rebuild chart if hiding completed
+                        const hideCompleted = document.getElementById('hideCompleted').checked;
+                        if (hideCompleted) {
+                            rebuildChart(); // chart updates, plugin will rerun beforeDraw
+                        }
+                    });
 
                     wrapper.appendChild(checkbox);
                     overlay.appendChild(wrapper);
@@ -536,6 +574,59 @@
                 y: 0,
                 data: []
             });
+        });
+        
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('vistaChart', () => ({
+                hideCompleted: localStorage.getItem('hideCompleted') === 'true',
+                init() {
+                    // watch hideCompleted toggle
+                    this.$watch('hideCompleted', (val) => {
+                        localStorage.setItem('hideCompleted', val);
+
+                        const filtered = val ? Vista.filter(v => !v.completed) : Vista;
+
+                        const vistaData = buildVistaGraphDataForRange(
+                            filtered,
+                            startUnixSeconds,
+                            endUnixSeconds
+                        );
+
+                        myChart.data.datasets[0].data = vistaData;
+                        myChart.options.scales.y.max = filtered.length;
+                        myChart.options.scales.y.labels = filtered.map(v => `${v.name}: #${v.number}`);
+                        myChart.update();
+                        // plugin afterRender will automatically rebuild checkboxes
+                    });
+                }
+            }));
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const hideCompletedCheckbox = document.getElementById('hideCompleted');
+            if (!hideCompletedCheckbox) return;
+
+            function rebuildChart() {
+                const hideCompleted = document.getElementById('hideCompleted').checked;
+                const filtered = hideCompleted ? Vista.filter(v => !v.completed) : Vista;
+
+                myChart.filteredVistas = filtered;
+
+                // rebuild dataset
+                const vistaData = buildVistaGraphDataForRange(filtered, startUnixSeconds, endUnixSeconds);
+                myChart.data.datasets[0].data = vistaData;
+
+                // rebuild y-axis
+                myChart.options.scales.y.max = filtered.length;
+                myChart.options.scales.y.labels = filtered.map(v => `${v.name}: #${v.number}`);
+                myChart.update();
+            }
+
+            // initial render
+            rebuildChart();
+
+            // handle hideCompleted toggle
+            hideCompletedCheckbox.addEventListener('change', rebuildChart);
         });
     </script>
 </body>
