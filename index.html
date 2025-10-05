@@ -61,19 +61,6 @@
             </p>
         </div>
 
-        <div class="container">
-            <div class="mb-3">
-                <h3><label for="regionFilter" class="form-label">Filter by Region</label></h3>
-                <select id="regionFilter" class="form-select w-100 d-inline-block"
-                        x-model="selectedRegions">
-                    <option value="">All Regions</option>
-                <template x-for="region in regions" :key="region">
-                    <option :value="region" x-text="region"></option>
-                </template>
-                </select>
-            </div>
-        </div>
-        
         <div class="container mt-4">
             <!-- Nav tabs -->
             <ul class="nav nav-tabs" id="mainTabs" role="tablist">
@@ -94,10 +81,22 @@
                 <!-- Skywatcher -->
                 <div class="tab-pane fade show active" id="forecast" role="tabpanel" aria-labelledby="forecast-tab">
                     <h3>Skywatcher</h3>
+
+                
+                    <div class="mb-3">
+                        <h4><label for="regionFilter" class="form-label">Filter by Region</label></h4>
+                        <select id="regionFilter" class="form-select w-100 d-inline-block" x-model="selectedRegions">
+                            <option value="">All Regions</option>
+                            <template x-for="region in regions" :key="region">
+                                <option :value="region" x-text="region"></option>
+                            </template>
+                        </select>
+                    </div>
+                
                     <template x-for="(region, index) in regions.filter(r => selectedRegions.length === 0 || selectedRegions.includes(r))" :key="region">
                         
                         <div>
-                            <h4 x-text="region"></h4>
+                            <h3 x-text="region"></h3>
                             <table class="table table-bordered w-100 mb-3">
                                 <thead>
                                     <tr>
@@ -154,9 +153,10 @@
                     <h3>Vista Oracle</h3>
     
                     <div class="chartBox">
-                        <h4>Limsa Lominsa Vistas</h4>
-                        <canvas id="myChart"></canvas>
-                        <input type="month" onChange="chartFilter(this)" />
+                        <div class="chart-container" style="position: relative; height: 2000px;">
+                            <canvas id="myChart"></canvas>
+                            <div id="vistaCheckboxesOverlay" style="position:absolute; top:0; left:0; pointer-events:none;"></div>
+                        </div>
                     </div>
                     
                     <div x-data
@@ -169,7 +169,7 @@
                                 <dl class="row">
                                     <dt class="col-sm-3 text-end">Log&nbsp;Entry</dt>
                                     <dd class="col-sm-9">
-                                        <span x-text="point.y"></span>: #<span x-text="point.number"></span>
+                                        <span x-text="point.y"></span>
                                     </dd>
 
                                     <dt class="col-sm-3 text-end">Location</dt>
@@ -221,18 +221,10 @@
         });
     </script>
     <script id="init-chart-js">
-        // setup
-        const colors = [
-            'rgba(255, 26, 104, 1)', // red
-            'rgba(255, 159, 64, 1)', // orange
-            'rgba(75, 192, 192, 1)', // green
-            'rgba(54, 162, 235, 1)'  // blue
-        ];
-        
         const startUnixSeconds = new Date().getTime() / 1000;
         const endUnixSeconds = startUnixSeconds + 3 * 60 * 60; // + 6 hours...
 
-        const vistasForGraph = Vista.filter(v => v.zone.region === Region.LA_NOSCEA);
+        const vistasForGraph = Vista;
         const vistaData = buildVistaGraphDataForRange(vistasForGraph, startUnixSeconds, endUnixSeconds);
         
         const data = {
@@ -251,6 +243,54 @@
                 barPercentage: 0.5,
                 categoryPercentage: 0.8,
             }]
+        };
+
+        // vistaCheckbox plugin
+        const vistaCheckboxPlugin = {
+            id: 'vistaCheckboxPlugin',
+            afterRender(chart) {
+                let overlay = document.getElementById('vistaCheckboxesOverlay');
+                if (!overlay) {
+                    overlay = document.createElement('div');
+                    overlay.id = 'vistaCheckboxesOverlay';
+                    overlay.style.position = 'absolute';
+                    overlay.style.pointerEvents = 'none';
+                    chart.canvas.parentNode.style.position = 'relative';
+                    chart.canvas.parentNode.appendChild(overlay);
+                }
+
+                const rect = chart.canvas.getBoundingClientRect();
+                overlay.style.width = rect.width + 'px';
+                overlay.style.height = rect.height + 'px';
+                overlay.style.top = chart.canvas.offsetTop + 'px';
+                overlay.style.left = chart.canvas.offsetLeft + 'px';
+                overlay.innerHTML = '';
+
+                const yScale = chart.scales.y;
+                const tickCount = yScale.ticks.length;
+
+                for (let i = 0; i < tickCount; i++) {
+                    const tick = yScale.ticks[i];
+                    const y = yScale.getPixelForTick(i);
+
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'form-check';
+                    wrapper.style.position = 'absolute';
+                    wrapper.style.pointerEvents = 'auto';
+                    wrapper.style.left = (yScale.right - 25) + 'px';
+                    wrapper.style.top = (y - 12) + 'px';
+
+                    const checkbox = document.createElement('input');
+                    checkbox.className = 'form-check-input';
+                    checkbox.type = 'checkbox';
+                    checkbox.checked = true;
+                    checkbox.id = `vistaCheckbox-${tick.value}`;
+                    checkbox.value = tick.value;
+
+                    wrapper.appendChild(checkbox);
+                    overlay.appendChild(wrapper);
+                }
+            }
         };
 
         // todayLine plugin
@@ -302,39 +342,16 @@
             }
         };
 
-        // vistaNumber plugin
-        const vistaNumber = {
-            id: 'vistaNumber',
-            afterDatasetsDraw(chart, args, options) {
-                const {ctx, data, chartArea: {top, bottom, left, right}, scales: {x, y}} = chart;
-                ctx.save();
-                ctx.font = 'bolder 12px sans-serif';
-                ctx.fillStyle = 'black';
-                ctx.textBaseline = 'middle';
-                
-                ctx.fillText('#', 10, top - 18);
-
-                data.datasets.forEach((dataset) => {
-                    dataset.data.forEach((datapoint) => {
-                        const yPos = y.getPixelForValue(datapoint.y);
-                        ctx.fillText(datapoint.number, 10, yPos);
-                    });
-                });
-
-                ctx.restore();
-            }
-        };
-
         // config 
         const config = {
             type: 'bar',
             data: data,
-            options: { 
+            options: {
+                maintainAspectRatio: false,
                 animation: true,
                 layout: {
                     padding: {
-                    left: 100,
-                    // right: 100,
+                    left: 0,
                     bottom: 20,
                     }
                 },
@@ -351,15 +368,14 @@
                     min: new Date(startUnixSeconds * 1000),
                     max: new Date(endUnixSeconds * 1000),
                     },
-                    // y: {
-                    //   min: 0,
-                    //   max: 5,
-                    //   labels: ['Task 1', 'Task 2', 'Task 3', 'Task 4', 'Task 5', 'Task 6', 'Task 7', 'Task 8', 'Task 9', 'Task 10',
-                    //            'Task 11', 'Task 12', 'Task 13', 'Task 14', 'Task 15', 'Task 16', 'Task 17', 'Task 18', 'Task 19', 'Task 20',
-                    //            'Task 21', 'Task 22', 'Task 23', 'Task 24', 'Task 25', 'Task 26', 'Task 27', 'Task 28', 'Task 29', 'Task 30',
-                    //            'Task 31', 'Task 32', 'Task 33', 'Task 34', 'Task 35', 'Task 36'
-                    //           ],
-                    // }
+                    y: {
+                        ticks: {
+                            padding: 25
+                        },
+                        min: 0,
+                        max: Vista.length,
+                        labels: Vista.map(v => `${v.name}: #${v.number}`),
+                    }
                 },
                 plugins: {
                     title: {
@@ -375,7 +391,7 @@
                     }
                 }
             },
-            plugins: [currentTimeMarker, vistaNumber]
+            plugins: [currentTimeMarker, vistaCheckboxPlugin]
         };
 
         // render init block
@@ -384,31 +400,6 @@
             config
         );
 
-        // filter function
-        function chartFilter(dateInputElement) {
-            const value = dateInputElement.value;
-            let year, month;
-            if (!value) {
-                const now = new Date();
-                [year, month] = [now.getFullYear(), now.getMonth()];
-            } else {
-                [year, month] = value.split('-').map(Number);
-            }
-            const startDate = new Date(year, month-1, 1);
-            const endDate = new Date(year, month, 0);
-            myChart.options.scales.x.min = startDate;
-            myChart.options.scales.x.max = endDate;
-            myChart.update();
-        }
-
-        function formatDateYyyyMmDdHHmmss(date) {
-            const year = date.getFullYear();
-            const month = (date.getMonth() + 1).toString().padStart(2, '0');
-            const day = date.getDate().toString().padStart(2, '0');
-            
-            return `${year}-${month}-${day}`;
-        }
-        
         function externalTooltipHandler(context) {
             const { chart, tooltip } = context;
             const tooltipStore = Alpine.store('chartTooltip');

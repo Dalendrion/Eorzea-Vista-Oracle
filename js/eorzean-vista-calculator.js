@@ -250,7 +250,7 @@ class VistaGraphData {
             padZero(vista.time.until) + ":00"
         ];
         this.x = [localTimeStart, localTimeEnd ];
-        this.y = vista.name;
+        this.y = `${vista.name}: #${vista.number}`;
         this.weather = vista.weather.map(w => getWeatherObject(w))
         this.emote = getEmoteObject(vista.emote),
         this.zone = vista.zone,
