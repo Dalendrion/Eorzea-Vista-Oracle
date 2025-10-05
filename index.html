@@ -225,10 +225,6 @@
         const startUnixSeconds = Math.floor(new Date().getTime() / 1000 / SECONDS_PER_WEATHER_WINDOW) * SECONDS_PER_WEATHER_WINDOW;
         const endUnixSeconds = startUnixSeconds + 9 * SECONDS_PER_WEATHER_WINDOW;
 
-        
-        // min: new Date(Math.floor(startUnixSeconds / SECONDS_PER_WEATHER_WINDOW) * SECONDS_PER_WEATHER_WINDOW * 1000),
-        // max: new Date(Math.ceil(endUnixSeconds / SECONDS_PER_WEATHER_WINDOW) * SECONDS_PER_WEATHER_WINDOW * 1000),
-
         const vistasForGraph = Vista;
         const vistaData = buildVistaGraphDataForRange(vistasForGraph, startUnixSeconds, endUnixSeconds);
         
@@ -367,40 +363,42 @@
                         position: 'top',
 
                         // Align min to a whole Eorzean hour
-                        min: new Date(Math.floor(startUnixSeconds / SECONDS_PER_WEATHER_WINDOW) * SECONDS_PER_WEATHER_WINDOW * 1000),
-                        max: new Date(Math.ceil(endUnixSeconds / SECONDS_PER_WEATHER_WINDOW) * SECONDS_PER_WEATHER_WINDOW * 1000),
+                        min: new Date(startUnixSeconds * 1000),
+                        max: new Date(endUnixSeconds * 1000),
 
                         time: {
-                            unit: 'hour',
-                            stepSize: 1,
-                            displayFormats: {
-                                hour: 'HH'
-                            }
+                            unit: 'second',
+                            stepSize: SECONDS_PER_WEATHER_WINDOW / SECONDS_PER_EORZEAN_HOUR
                         },
 
                         ticks: {
                             minRotation: 0,
                             maxRotation: 0,
-                            callback: function(value, index, ticks) {
-                                const tick = ticks[index];
-                                if (tick && tick.major) {
-                                    const seconds = value / 1000;
+                            // autoSkip: false,
+                            stepSize: SECONDS_PER_EORZEAN_HOUR * EORZEAN_HOURS_PER_WEATHER_WINDOW,
+                            callback: function(value) {
+                                const seconds = value / 1000;
+                                const isMajor = seconds % (SECONDS_PER_EORZEAN_HOUR * EORZEAN_HOURS_PER_WEATHER_WINDOW) === 0;
+
+                                // if (isMajor) {
                                     return [formatLocalTime(seconds) + ' LT', formatEorzeanTime(seconds) + ' ET'];
-                                }
-                                return '';
-                            }
+                                // }
+                                // return '';
+                            },
                         },
 
                         afterBuildTicks(scale) {
                             const ticks = [];
-                            // Align start to the nearest full Eorzean hour
-                            const alignedStart = Math.floor(startUnixSeconds / SECONDS_PER_EORZEAN_HOUR) * SECONDS_PER_EORZEAN_HOUR;
-                            const alignedEnd = Math.ceil(endUnixSeconds / SECONDS_PER_EORZEAN_HOUR) * SECONDS_PER_EORZEAN_HOUR;
+                            const startSec = Math.floor(scale.min / 1000);
+                            const endSec = Math.ceil(scale.max / 1000);
 
-                            for (let t = alignedStart; t <= alignedEnd; t += SECONDS_PER_EORZEAN_HOUR) {
+                            // Align to a whole Eorzean hour to keep tick spacing stable
+                            const startAligned = Math.floor(startSec / SECONDS_PER_EORZEAN_HOUR) * SECONDS_PER_EORZEAN_HOUR;
+
+                            for (let t = startAligned; t <= endSec; t += SECONDS_PER_EORZEAN_HOUR) {
                                 ticks.push({
                                     value: t * 1000,
-                                    major: (t / SECONDS_PER_EORZEAN_HOUR) % EORZEAN_HOURS_PER_WEATHER_WINDOW === 0
+                                    major: t % (SECONDS_PER_EORZEAN_HOUR * EORZEAN_HOURS_PER_WEATHER_WINDOW) === 0
                                 });
                             }
 
