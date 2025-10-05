@@ -362,29 +362,25 @@
                         type: 'time',
                         position: 'top',
 
-                        // Align min to a whole Eorzean hour
+                        // Align min/max to your desired range
                         min: new Date(startUnixSeconds * 1000),
                         max: new Date(endUnixSeconds * 1000),
 
                         time: {
                             unit: 'second',
-                            stepSize: SECONDS_PER_WEATHER_WINDOW / SECONDS_PER_EORZEAN_HOUR
+                            tooltipFormat: 'HH:mm:ss',
                         },
 
                         ticks: {
                             minRotation: 0,
                             maxRotation: 0,
-                            // autoSkip: false,
-                            stepSize: SECONDS_PER_EORZEAN_HOUR * EORZEAN_HOURS_PER_WEATHER_WINDOW,
                             callback: function(value) {
                                 const seconds = value / 1000;
-                                const isMajor = seconds % (SECONDS_PER_EORZEAN_HOUR * EORZEAN_HOURS_PER_WEATHER_WINDOW) === 0;
-
-                                // if (isMajor) {
-                                    return [formatLocalTime(seconds) + ' LT', formatEorzeanTime(seconds) + ' ET'];
-                                // }
-                                // return '';
-                            },
+                                return [
+                                    formatEorzeanTime(seconds) + ' ET',
+                                    formatLocalTime(seconds) + ' LT'
+                                ];
+                            }
                         },
 
                         afterBuildTicks(scale) {
@@ -392,13 +388,13 @@
                             const startSec = Math.floor(scale.min / 1000);
                             const endSec = Math.ceil(scale.max / 1000);
 
-                            // Align to a whole Eorzean hour to keep tick spacing stable
-                            const startAligned = Math.floor(startSec / SECONDS_PER_EORZEAN_HOUR) * SECONDS_PER_EORZEAN_HOUR;
+                            // Align start to the nearest weather window
+                            const startAligned = Math.floor(startSec / SECONDS_PER_WEATHER_WINDOW) * SECONDS_PER_WEATHER_WINDOW;
 
-                            for (let t = startAligned; t <= endSec; t += SECONDS_PER_EORZEAN_HOUR) {
+                            for (let t = startAligned; t <= endSec; t += SECONDS_PER_WEATHER_WINDOW) {
                                 ticks.push({
                                     value: t * 1000,
-                                    major: t % (SECONDS_PER_EORZEAN_HOUR * EORZEAN_HOURS_PER_WEATHER_WINDOW) === 0
+                                    major: true
                                 });
                             }
 
