@@ -17,40 +17,41 @@ function getWeatherWindowStarts(unixSeconds, numberOfWindows) {
 const SECONDS_PER_EORZEAN_HOUR = 175; // 175 real-world seconds = 1 Eorzean hour
 const EORZEAN_HOURS_PER_WEATHER_WINDOW = 8; // Weather changes every 8 Eorzean hours
 const SECONDS_PER_WEATHER_WINDOW = SECONDS_PER_EORZEAN_HOUR * EORZEAN_HOURS_PER_WEATHER_WINDOW; // 8 Eorzean hours = 1 weather window
-const SECONDS_PER_EORZEAN_DAY = SECONDS_PER_EORZEAN_HOUR * 24; // 24 Eorzean hours = 1 Eorzean day
+const HOURS_PER_DAY = 24;
+const SECONDS_PER_EORZEAN_DAY = SECONDS_PER_EORZEAN_HOUR * HOURS_PER_DAY; // 24 Eorzean hours = 1 Eorzean day
 
 function padZero(num) {
     return (num < 10 ? "0" : "") + num;
 }
 
 function formatDate(unixSeconds, pattern) {
-    var d = new Date(unixSeconds * 1000);
+    const d = new Date(unixSeconds * 1000);
     
-    var monthNames = [
+    const monthNames = [
         "January", "February", "March", "April",
         "May", "June", "July", "August",
         "September", "October", "November", "December"
     ];
-    var monthShortNames = [
+    const monthShortNames = [
         "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug",
         "Sep", "Oct", "Nov", "Dec"
     ];
-    var monthName = monthNames[d.getMonth()];
-    var monthShortName = monthShortNames[d.getMonth()];
-    var month = d.getMonth() + 1;
+    const monthName = monthNames[d.getMonth()];
+    const monthShortName = monthShortNames[d.getMonth()];
+    const month = d.getMonth() + 1;
     
-    var replacements = {
+    const replacements = {
         YYYY: d.getFullYear(),
         MM: padZero(month),
         MMM: monthShortName,
         MMMM: monthName,
-        DD: padZero(d.getDate()),
+        dd: padZero(d.getDate()),
         HH: padZero(d.getHours()),
         mm: padZero(d.getMinutes()),
         ss: padZero(d.getSeconds())
     };
 
-    for (var key in replacements) {
+    for (let key in replacements) {
         pattern = pattern.replace(key, replacements[key]);
     }
 
@@ -63,38 +64,38 @@ function formatLocalTime(unixSeconds) {
 
 function formatEorzeanTime(unixSeconds) {
     // Seconds into the current Eorzean day
-    var secondsInEorzeanDay = unixSeconds % SECONDS_PER_EORZEAN_DAY;
+    const secondsInEorzeanDay = unixSeconds % SECONDS_PER_EORZEAN_DAY;
 
     // Compute Eorzean hour and minute
-    var eorzeanHours = Math.floor(secondsInEorzeanDay / SECONDS_PER_EORZEAN_HOUR);
-    var eorzeanMinutes = Math.floor(((secondsInEorzeanDay % SECONDS_PER_EORZEAN_HOUR) / SECONDS_PER_EORZEAN_HOUR) * 60);
+    const eorzeanHours = Math.floor(secondsInEorzeanDay / SECONDS_PER_EORZEAN_HOUR);
+    const eorzeanMinutes = Math.floor(((secondsInEorzeanDay % SECONDS_PER_EORZEAN_HOUR) / SECONDS_PER_EORZEAN_HOUR) * 60);
 
     return padZero(eorzeanHours) + ":" + padZero(eorzeanMinutes);
 }
 
 function forecastTarget(table, unixSeconds) {
     // Canonical FFXIV weather calculation algorithm (matches C# logic)
-    var chanceSum = 0;
-    for (var i = 0; i < table.length; i++) {
+    let chanceSum = 0;
+    for (let i = 0; i < table.length; i++) {
         chanceSum += table[i].chance;
     }
-    var windowStart = getWeatherWindowStart(unixSeconds);
-    var bell = Math.floor(windowStart / SECONDS_PER_EORZEAN_HOUR);
-    var increment = (bell + 8 - (bell % 8)) % 24;
-    var totalDays = Math.floor(windowStart / SECONDS_PER_EORZEAN_DAY);
-    var calcBase = (totalDays * 100) + increment;
-    var step1 = ((calcBase << 11) ^ calcBase) >>> 0;
-    var step2 = ((step1 >>> 8) ^ step1) >>> 0;
+    const windowStart = getWeatherWindowStart(unixSeconds);
+    const bell = Math.floor(windowStart / SECONDS_PER_EORZEAN_HOUR);
+    const increment = (bell + 8 - (bell % 8)) % HOURS_PER_DAY;
+    const totalDays = Math.floor(windowStart / SECONDS_PER_EORZEAN_DAY);
+    const calcBase = (totalDays * 100) + increment;
+    const step1 = ((calcBase << 11) ^ calcBase) >>> 0;
+    const step2 = ((step1 >>> 8) ^ step1) >>> 0;
     return step2 % chanceSum;
 }
 
 function getWeather(areaName, unixSeconds) {
-    var table = weatherTables[areaName];
-    var forecast = forecastTarget(table, unixSeconds);
+    const table = weatherTables[areaName];
+    const forecast = forecastTarget(table, unixSeconds);
     if (!table) {
         return "Unknown zone";
     }
-    for (var i = 0; i < table.length; i++) {
+    for (let i = 0; i < table.length; i++) {
         if (forecast < table[i].threshold) {
             return table[i].name;
         }
@@ -110,6 +111,23 @@ function getNextWeatherWindowStart(unixSeconds) {
     return getWeatherWindowStart(unixSeconds) + SECONDS_PER_WEATHER_WINDOW;
 }
 
+function getEorzeanHourStart(unixSeconds) {
+    return unixSeconds - (unixSeconds % SECONDS_PER_EORZEAN_HOUR);
+}
+
+function getNextEorzeanHourStart(unixSeconds) {
+    return getEorzeanHourStart(unixSeconds) + SECONDS_PER_EORZEAN_HOUR;
+}
+
+function getWeatherObject(weather) {
+    // Remove HTML entities (like &shy;) for image path
+    const weatherForImage = weather.replace(/&[^;]+;/g, "");
+    return {
+        name: weather,
+        icon: `img/weather/${weatherForImage.replace(/ /g, "_")}_icon.png`
+    };
+}
+
 /**
  * Calculates the weather forecast for an areas at a given time.
  * 
@@ -117,7 +135,7 @@ function getNextWeatherWindowStart(unixSeconds) {
  * ```
  * forecast: {
  *     weather: "Clear Skies",
- *     image: "img/weather/Clear_Skies_icon.png",
+ *     icon: "img/weather/Clear_Skies_icon.png",
  * }
  * ```
  * @param areaName Area name, e.g. "Limsa Lominsa" or "Gridania"
@@ -125,13 +143,15 @@ function getNextWeatherWindowStart(unixSeconds) {
  * @returns the weather forecast for the specified area and time
  */
 function getWeatherForecast(areaName, unixSeconds) {
-    var windowStart = getWeatherWindowStart(unixSeconds);
-    var weather = getWeather(areaName, windowStart);
-    // Remove HTML entities (like &shy;) for image path
-    var weatherForImage = weather.replace(/&[^;]+;/g, "");
+    const windowStart = getWeatherWindowStart(unixSeconds);
+    const weather = getWeather(areaName, windowStart);
+    return getWeatherObject(weather);
+}
+
+function getEmoteObject(emoteName) {
     return {
-        weather: weather,
-        image: "img/weather/" + weatherForImage.replace(/ /g, "_") + "_icon.png"
+        name: emoteName,
+        icon: `img/emotes/${emoteName}.png`
     };
 }
 
@@ -151,6 +171,91 @@ function getZonesByRegion(region) {
  */
 function getZonesByExpansions(expansions) {
     return Object.values(Zone).filter(zone => expansions.includes(zone.expansion));
+}
+
+function getEorzeanHour(unixSeconds) {
+    return Math.floor((unixSeconds % SECONDS_PER_EORZEAN_DAY) / SECONDS_PER_EORZEAN_HOUR);
+}
+
+function isVistaTimeConditionMet(unixSeconds, vista) {
+    let eorzeanHour = getEorzeanHour(unixSeconds);
+    let start = vista.time.from;
+    let end = vista.time.until;
+    
+    if (end < start) {
+        end += HOURS_PER_DAY;
+    }
+    if (eorzeanHour < start) {
+        eorzeanHour += HOURS_PER_DAY;
+    }
+
+    return eorzeanHour >= start && eorzeanHour < end;
+}
+
+function isVistaWeatherConditionMet(unixSeconds, vista) {
+    const forecast = getWeatherForecast(vista.zone.name, unixSeconds);
+    return vista.weather.includes(forecast.name);
+}
+
+/**
+ * Builds chart-ready data from Vista definitions and weather tables for a given time range.
+ * Adjacent windows are merged.
+ * 
+ * @param {object[]} vistas - Array of Vista objects.
+ * @param {number} startUnixSeconds - Start of the time range to calculate data for.
+ * @param {number} endUnixSeconds - End of the time range to calculate data for.
+ * @returns {VistaGraphData[]} Chart.js compatible datasets object.
+ */
+function buildVistaGraphDataForRange(vistas, startUnixSeconds, endUnixSeconds) {
+    const data = [];
+
+    vistas.forEach(vista => {
+        const mergedWindows = [];
+
+        let windowStart = getEorzeanHourStart(startUnixSeconds);
+        while (windowStart < endUnixSeconds) {
+            const windowEnd = getNextEorzeanHourStart(windowStart);
+            const windowStartDate = new Date(windowStart * 1000);
+            const windowEndDate = new Date(windowEnd * 1000);
+
+            if (isVistaTimeConditionMet(windowStart, vista) && isVistaWeatherConditionMet(windowStart, vista)) {
+                // Create a timeslot for this Vista
+                const lastMerged = mergedWindows[mergedWindows.length - 1];
+                if (lastMerged && lastMerged.x[1].getTime() === windowStartDate.getTime()) {
+                    // Merge with previous block if consecutive
+                    lastMerged.x[1] = windowEndDate;
+                } else {
+                    // New timeslot
+                    mergedWindows.push(new VistaGraphData(vista, windowStartDate, windowEndDate));
+                }
+            }
+
+            windowStart = windowEnd;
+        }
+
+        data.push(...mergedWindows);
+    });
+
+    return data;
+}
+
+/**
+ * Chart.js compatible dataset
+ */
+class VistaGraphData {
+    constructor(vista, localTimeStart, localTimeEnd) {
+        this.number = vista.number;
+        this.eorzeaTime = [
+            padZero(vista.time.from) + ":00",
+            padZero(vista.time.until) + ":00"
+        ];
+        this.x = [localTimeStart, localTimeEnd ];
+        this.y = `${vista.name}: #${vista.number}`;
+        this.weather = vista.weather.map(w => getWeatherObject(w))
+        this.emote = getEmoteObject(vista.emote),
+        this.zone = vista.zone,
+        this.location = vista.coordinates
+    }
 }
 
 window.getWeatherForecast = getWeatherForecast

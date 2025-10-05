@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eorzea Vista Oracle</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/bootstrap-icons-1.10.5/font/bootstrap-icons.css">
     <link href="css/compact-table.css" rel="stylesheet">
     <script defer src="js/alpine.min.js"></script>
     <script src="js/bootstrap.bundle.min.js"></script>
@@ -31,13 +31,29 @@
         resetShiftWindow() {
             this.windowShifts = 0;
         },
-        regions: Object.values(window.Region)
+        regions: Object.values(window.Region),
+        selectedRegions: [],
+        scrollToSlot(vistaIndex, direction) {
+            const row = document.querySelector(`#vista-${vistaIndex}`);
+            const cells = row.querySelectorAll('td');
+
+            const targetSlot = row.querySelector(`#vista-${vistaIndex}-slot-${direction > 0 ? 5 : 0}`);
+            if (targetSlot) {
+                targetSlot.scrollIntoView({behavior: 'smooth', inline: 'center'});
+            }
+        },
+        isVistaAvailable(vista, slot) {
+            return true;
+        },
+        hideCompletedVistas: false,
     }"
     x-init="setInterval(() => { updateTimes() }, 1000)">
+        
         <div class="container">
             <h1>Welcome to the Eorzea Vista Oracle</h1>
             <p>This tool provides a quick reference for the current and upcoming weather in various zones of Eorzea, the world of Final Fantasy XIV.</p>
         </div>
+        
         <div class="container">
             <h2>Current Time</h2>
             <p>
@@ -45,83 +61,573 @@
                 <span class="badge text-bg-secondary" data-bs-toggle="tooltip" data-bs-title="Local Time">LT</span> <span x-text="localTime"></span>
             </p>
         </div>
-        <div class="container">
-            <h2>Weather forecast</h2>
-            <div class="accordion" id="weatherAccordion">
-                <template x-for="(region, index) in regions" :key="region">
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" :id="`heading-${index}`">
-                            <button class="accordion-button collapsed" type="button"
-                                    data-bs-toggle="collapse"
-                                    :data-bs-target="`#collapse-${index}`"
-                                    aria-expanded="true"
-                                    :aria-controls="`collapse-${index}`">
-                                <h3 x-text="region"></h3>
-                            </button>
-                        </h2>
-                        <div :id="`collapse-${index}`" class="accordion-collapse collapse"
-                            :aria-labelledby="`heading-${index}`"
-                            data-bs-parent="#weatherAccordion">
-                            <div class="accordion-body p-0">
-                                <table class="table table-bordered w-auto mb-3">
-                                    <thead>
-                                        <tr>
-                                            <th>
-                                                <div class="d-flex justify-content-center align-items-center">
-                                                    <div class="btn-group" role="group">
-                                                        <button type="button" @click="shiftWindow(-1)" class="btn btn-light" data-bs-toggle="tooltip" title="Move back in time">
-                                                            <i class="bi bi-caret-left-fill"></i>
-                                                        </button>
-                                                        <button type="button" @click="resetShiftWindow()" class="btn btn-light" data-bs-toggle="tooltip" title="Reset to current time">
-                                                            <i class="bi bi-arrow-counterclockwise"></i>
-                                                        </button>
-                                                        <button type="button" @click="shiftWindow(1)" class="btn btn-light" data-bs-toggle="tooltip" title="Move forward in time">
-                                                            <i class="bi bi-caret-right-fill"></i>
-                                                        </button>
-                                                    </div>
+
+        <div class="container mt-4">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" id="mainTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="forecast-tab" data-bs-toggle="tab" data-bs-target="#forecast" type="button" role="tab" aria-controls="forecast" aria-selected="true">
+                    Skywatcher
+                </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                <button class="nav-link" id="vista-tab" data-bs-toggle="tab" data-bs-target="#vistas" type="button" role="tab" aria-controls="vistas" aria-selected="false">
+                    Vista Oracle
+                </button>
+                </li>
+            </ul>
+            
+            <!-- Tab content -->
+            <div class="tab-content p-3 border border-top-0">
+                <!-- Skywatcher -->
+                <div class="tab-pane fade show active" id="forecast" role="tabpanel" aria-labelledby="forecast-tab">
+                    <h3>Skywatcher</h3>
+
+                
+                    <div class="mb-3">
+                        <h4><label for="regionFilter" class="form-label">Filter by Region</label></h4>
+                        <select id="regionFilter" class="form-select w-100 d-inline-block" x-model="selectedRegions">
+                            <option value="">All Regions</option>
+                            <template x-for="region in regions" :key="region">
+                                <option :value="region" x-text="region"></option>
+                            </template>
+                        </select>
+                    </div>
+                
+                    <template x-for="(region, index) in regions.filter(r => selectedRegions.length === 0 || selectedRegions.includes(r))" :key="region">
+                        
+                        <div>
+                            <h3 x-text="region"></h3>
+                            <table class="table table-bordered w-100 mb-3">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <div class="d-flex justify-content-center align-items-center">
+                                                <div class="btn-group" role="group">
+                                                    <button type="button" @click="shiftWindow(-1)" class="btn btn-light" data-bs-toggle="tooltip" title="Move back in time">
+                                                        <i class="bi bi-caret-left-fill"></i>
+                                                    </button>
+                                                    <button type="button" @click="resetShiftWindow()" class="btn btn-light" data-bs-toggle="tooltip" title="Reset to current time">
+                                                        <i class="bi bi-arrow-counterclockwise"></i>
+                                                    </button>
+                                                    <button type="button" @click="shiftWindow(1)" class="btn btn-light" data-bs-toggle="tooltip" title="Move forward in time">
+                                                        <i class="bi bi-caret-right-fill"></i>
+                                                    </button>
                                                 </div>
+                                            </div>
+                                        </th>
+                                        <template x-for="windowStart in windowStarts" :key="windowStart">
+                                            <th class="text-nowrap fixed-col">
+                                                <span class="badge text-bg-secondary">ET</span>
+                                                <span x-text="formatEorzeanTime(windowStart + windowShifts * SECONDS_PER_WEATHER_WINDOW)"></span><br>
+                                                <span class="badge text-bg-secondary">LT</span>
+                                                <span x-text="formatLocalTime(windowStart + windowShifts * SECONDS_PER_WEATHER_WINDOW)"></span>
                                             </th>
+                                        </template>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template x-for="zone in getZonesByRegion(region)" :key="zone.name">
+                                        <tr>
+                                            <td x-text="zone.name"></td>
                                             <template x-for="windowStart in windowStarts" :key="windowStart">
-                                                <th class="text-nowrap fixed-col">
-                                                    <span class="badge text-bg-secondary">ET</span>
-                                                    <span x-text="formatEorzeanTime(windowStart + windowShifts * SECONDS_PER_WEATHER_WINDOW)"></span><br>
-                                                    <span class="badge text-bg-secondary">LT</span>
-                                                    <span x-text="formatLocalTime(windowStart + windowShifts * SECONDS_PER_WEATHER_WINDOW)"></span>
-                                                </th>
+                                                <td class="small fixed-col">
+                                                    <div class="d-flex flex-column align-items-center justify-content-center">
+                                                        <img :src="getWeatherForecast(zone.name, windowStart + windowShifts * SECONDS_PER_WEATHER_WINDOW).icon"
+                                                            :alt="getWeatherForecast(zone.name, windowStart + windowShifts * SECONDS_PER_WEATHER_WINDOW).name"
+                                                            style="width:32px;height:32px;" class="mb-1">
+                                                        <span x-html="getWeatherForecast(zone.name, windowStart + windowShifts * SECONDS_PER_WEATHER_WINDOW).name"
+                                                            class="d-block text-center break-word"></span>
+                                                    </div>
+                                                </td>
                                             </template>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        <template x-for="zone in getZonesByRegion(region)" :key="zone.name">
-                                            <tr>
-                                                <td x-text="zone.name"></td>
-                                                <template x-for="windowStart in windowStarts" :key="windowStart">
-                                                    <td class="small fixed-col">
-                                                        <div class="d-flex flex-column align-items-center justify-content-center">
-                                                            <img :src="getWeatherForecast(zone.name, windowStart + windowShifts * SECONDS_PER_WEATHER_WINDOW).image"
-                                                             :alt="getWeatherForecast(zone.name, windowStart + windowShifts * SECONDS_PER_WEATHER_WINDOW).weather" style="width:32px;height:32px;" class="mb-1">
-                                                            <span x-html="getWeatherForecast(zone.name, windowStart + windowShifts * SECONDS_PER_WEATHER_WINDOW).weather" class="d-block text-center break-word"></span>
-                                                        </div>
-                                                    </td>
-                                                </template>
-                                            </tr>
-                                        </template>
-                                    </tbody>
-                                </table>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>                        
+                    </template>
+                </div>
+                
+                <!-- Vista Oracle -->
+                <div class="tab-pane fade" id="vistas" role="tabpanel" aria-labelledby="vista-tab">
+                    <h3>Vista Oracle</h3>
+    
+                    <div class="chartBox">
+                        <div class="chart-container" style="position: relative; height: 2000px;">
+                            <div class="form-check mb-2" x-data="vistaChart">
+                                <input class="form-check-input" type="checkbox" id="hideCompleted" x-model="hideCompleted">
+                                <label class="form-check-label" for="hideCompleted">
+                                    Hide Completed Vistas
+                                </label>
                             </div>
+                            <canvas id="myChart"></canvas>
+                            <div id="vistaCheckboxesOverlay" style="position:absolute; top:0; left:0; pointer-events:none;"></div>
                         </div>
                     </div>
-                </template>
+                    
+                    <div x-data
+                         x-show="$store.chartTooltip.show"
+                         x-transition
+                         x-bind:style="`position: absolute; left: ${$store.chartTooltip.x}px; top: ${$store.chartTooltip.y}px;`"
+                         class="chart-tooltip bg-dark text-white small px-2 py-1 rounded shadow">
+                        <template x-for="(point, i) in $store.chartTooltip.data" :key="i">
+                            <div>
+                                <dl class="row">
+                                    <dt class="col-sm-3 text-end">Log&nbsp;Entry</dt>
+                                    <dd class="col-sm-9">
+                                        <span x-text="point.y"></span>
+                                    </dd>
+
+                                    <dt class="col-sm-3 text-end">Location</dt>
+                                    <dd class="col-sm-9">
+                                        <div x-text="point.zone.name"></div>
+                                            (<small><strong>X</strong></small>: <span x-text="point.location.x"></span>, 
+                                            <small><strong>Y</strong></small>: <span x-text="point.location.y"></span><template x-if="point.location.z !== undefined"><span>,
+                                            <small><strong>Z</strong></small>: <span x-text="point.location.z"></span></span></template>)
+                                    </dd>
+
+                                    <dt class="col-sm-3 text-end">Emote</dt>
+                                    <dd class="col-sm-9">
+                                        <img :alt="point.emote.name" :src="point.emote.icon" width="20" height="20">&nbsp;<span x-text="point.emote.name"></span>
+                                    </dd>
+
+                                    <dt class="col-sm-3 text-end">Weather</dt>
+                                    <dd class="col-sm-9">
+                                        <template x-for="(w, wi) in point.weather" :key="wi">
+                                            <div><img :alt="w.name" :src="w.icon" width="32" height="32"><span x-text="w.name"></span>&nbsp;</div>
+                                        </template>
+                                    </dd>
+
+                                    <dt class="col-sm-3 text-end"><span class="badge text-bg-secondary" data-bs-toggle="tooltip" data-bs-title="Eorzea Time">ET</span></dt>
+                                    <dd class="col-sm-9">
+                                        <span x-text="formatEorzeanTime(new Date(point.x[0]).getTime() / 1000)"></span> -
+                                        <span x-text="formatEorzeanTime(new Date(point.x[1]).getTime() / 1000)"></span>
+                                    </dd>
+
+                                    <dt class="col-sm-3 text-end"><span class="badge text-bg-secondary" data-bs-toggle="tooltip" data-bs-title="Local Time">LT</span></dt>
+                                    <dd class="col-sm-9">
+                                        <span x-text="formatLocalTime(new Date(point.x[0]).getTime() / 1000)"></span> -
+                                        <span x-text="formatLocalTime(new Date(point.x[1]).getTime() / 1000)"></span>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </template>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
-    <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle=\"tooltip\"]'));
-        tooltipTriggerList.forEach(function (tooltipTriggerEl) {
-            new bootstrap.Tooltip(tooltipTriggerEl);
+    <script type="text/javascript" src="js/chart.umd.min.js"></script>
+    <script type="text/javascript" src="js/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script id="init-bootstrap-tooltip">
+        document.addEventListener('DOMContentLoaded', function () {
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle=\"tooltip\"]'));
+            tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+                new bootstrap.Tooltip(tooltipTriggerEl);
+            });
         });
-    });
-</script>
+    </script>
+    <script id="init-chart-js">
+        const startUnixSeconds = Math.floor(new Date().getTime() / 1000 / SECONDS_PER_WEATHER_WINDOW) * SECONDS_PER_WEATHER_WINDOW;
+        const endUnixSeconds = startUnixSeconds + 9 * SECONDS_PER_WEATHER_WINDOW;
+
+        // restore completed statues
+        const savedCompleted = localStorage.getItem('vistaCompleted');
+        if (savedCompleted) {
+            const completedArray = JSON.parse(savedCompleted);
+            completedArray.forEach((status, i) => {
+                if (Vista[i]) {
+                    Vista[i].completed = status;
+                }
+            });
+        }
+
+        const vistasForGraph = Vista;
+        const vistaData = buildVistaGraphDataForRange(vistasForGraph, startUnixSeconds, endUnixSeconds);
+        
+        const data = {
+            datasets: [{
+                label: 'Vistas',
+                data: vistaData,
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(54, 162, 235, 1)'
+                ],
+                borderWidth: 1,
+                borderSkipped: false,
+                borderRadius: 100,
+                barPercentage: 0.5,
+                categoryPercentage: 0.8,
+            }]
+        };
+
+        // vistaCheckbox plugin
+        const vistaCheckboxPlugin = {
+            id: 'vistaCheckboxPlugin',
+
+            beforeDraw(chart) {
+                let overlay = document.getElementById('vistaCheckboxesOverlay');
+                if (!overlay) {
+                    overlay = document.createElement('div');
+                    overlay.id = 'vistaCheckboxesOverlay';
+                    overlay.style.position = 'absolute';
+                    overlay.style.pointerEvents = 'none';
+                    chart.canvas.parentNode.style.position = 'relative';
+                    chart.canvas.parentNode.appendChild(overlay);
+                }
+
+                // size & position overlay
+                const rect = chart.canvas.getBoundingClientRect();
+                overlay.style.width = rect.width + 'px';
+                overlay.style.height = rect.height + 'px';
+                overlay.style.top = chart.canvas.offsetTop + 'px';
+                overlay.style.left = chart.canvas.offsetLeft + 'px';
+                overlay.innerHTML = ''; // clear previous checkboxes
+
+                const yScale = chart.scales.y;
+                const tickCount = yScale.ticks.length;
+                const filtered = chart.filteredVistas || Vista;
+
+                for (let i = 0; i < tickCount; i++) {
+                    const vista = filtered[i];
+                    const tick = yScale.ticks[i];
+                    tick.vistaNumber = vista.number; // store the original vista number
+                    const y = yScale.getPixelForTick(i);
+
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'form-check';
+                    wrapper.style.position = 'absolute';
+                    wrapper.style.pointerEvents = 'auto';
+                    wrapper.style.left = (yScale.right - 25) + 'px';
+                    wrapper.style.top = (y - 12) + 'px';
+
+                    const checkbox = document.createElement('input');
+                    checkbox.className = 'form-check-input';
+                    checkbox.type = 'checkbox';
+                    checkbox.id = `vistaCheckbox-${tick.vistaNumber}`;
+                    checkbox.value = tick.vistaNumber;
+
+                    // set initial checked state from the original Vista array
+                    const originalVista = Vista.find(v => v.number === tick.vistaNumber);
+                    checkbox.checked = originalVista?.completed || false;
+
+                    // update Vista.completed on toggle
+                    checkbox.addEventListener('change', () => {
+                        if (originalVista) originalVista.completed = checkbox.checked;
+                        localStorage.setItem('vistaCompleted', JSON.stringify(Vista.map(v => v.completed)));
+
+                        // rebuild chart if hiding completed
+                        const hideCompleted = document.getElementById('hideCompleted').checked;
+                        if (hideCompleted) {
+                            rebuildChart(); // chart updates, plugin will rerun beforeDraw
+                        }
+                    });
+
+                    wrapper.appendChild(checkbox);
+                    overlay.appendChild(wrapper);
+                }
+            }
+        };
+
+        // todayLine plugin
+        const currentTimeMarker = {
+            id: 'currentTimeMarker',
+            afterDatasetsDraw(chart, args, options) {
+                const {ctx, data, chartArea: {top, bottom, left, right}, scales: {x, y}} = chart;
+
+                const today = new Date();
+                if (today < x.min || today > x.max) {
+                    return;
+                }
+
+                const xPos = x.getPixelForValue(today);
+
+                if (xPos < left || xPos > right) {
+                    return;
+                }
+
+                ctx.save();
+                ctx.lineWidth = 1;
+                ctx.strokeStyle = 'rgba(102, 102, 102, 1)';
+                ctx.fillStyle = 'rgba(102, 102, 102, 1)';
+                ctx.beginPath();
+                ctx.moveTo(xPos, top);
+                ctx.lineTo(xPos - 5, top - 8);
+                ctx.lineTo(xPos + 5, top - 8);
+                ctx.closePath();
+                ctx.stroke();
+                ctx.fill();
+                ctx.restore();
+
+                ctx.save();
+                ctx.fillStyle = 'rgba(102, 102, 102, 1)';
+                ctx.textAlign = 'center';
+                ctx.font = '12px sans-serif';
+                ctx.fillText('Now', xPos, bottom + 15);
+                ctx.restore();
+
+                ctx.save();
+                ctx.lineWidth = 3;
+                ctx.strokeStyle = 'rgba(102, 102, 102, 1)';
+                ctx.beginPath();
+                ctx.moveTo(xPos, top);
+                ctx.lineTo(xPos, bottom);
+                ctx.setLineDash([5, 5]);
+                ctx.stroke();
+                ctx.restore();
+            }
+        };
+
+        // config 
+        const config = {
+            type: 'bar',
+            data: data,
+            options: {
+                maintainAspectRatio: false,
+                animation: true,
+                layout: {
+                    padding: {
+                    left: 0,
+                    bottom: 20,
+                    }
+                },
+                indexAxis: 'y',
+                scales: {
+                    x: {
+                        type: 'time',
+                        position: 'top',
+
+                        // Align min/max to your desired range
+                        min: new Date(startUnixSeconds * 1000),
+                        max: new Date(endUnixSeconds * 1000),
+
+                        time: {
+                            unit: 'second',
+                            tooltipFormat: 'HH:mm:ss',
+                        },
+
+                        ticks: {
+                            minRotation: 0,
+                            maxRotation: 0,
+                            callback: function(value) {
+                                const seconds = value / 1000;
+                                return [
+                                    formatEorzeanTime(seconds) + ' ET',
+                                    formatLocalTime(seconds) + ' LT'
+                                ];
+                            }
+                        },
+
+                        afterBuildTicks(scale) {
+                            const ticks = [];
+                            const startSec = Math.floor(scale.min / 1000);
+                            const endSec = Math.ceil(scale.max / 1000);
+
+                            // Align start to the nearest weather window
+                            const startAligned = Math.floor(startSec / SECONDS_PER_WEATHER_WINDOW) * SECONDS_PER_WEATHER_WINDOW;
+
+                            for (let t = startAligned; t <= endSec; t += SECONDS_PER_WEATHER_WINDOW) {
+                                ticks.push({
+                                    value: t * 1000,
+                                    major: true
+                                });
+                            }
+
+                            scale.ticks = ticks;
+                        },
+
+                        grid: {
+                            color: 'rgba(200,200,200,1)',
+                            lineWidth: function(context) {
+                                return context.tick && context.tick.major ? 1.5 : 0.7;
+                            }
+                        }
+                    },
+                    y: {
+                        ticks: {
+                            padding: 25
+                        },
+                        min: 0,
+                        max: Vista.length,
+                        labels: Vista.map(v => `${v.name}: #${v.number}`),
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: false
+                    },
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        enabled: false,
+                        position: 'nearest',
+                        external: externalTooltipHandler,
+                    }
+                }
+            },
+            plugins: [currentTimeMarker, vistaCheckboxPlugin]
+        };
+
+        // render init block
+        const myChart = new Chart(
+            document.getElementById('myChart'),
+            config
+        );
+
+        function externalTooltipHandler(context) {
+            const { chart, tooltip } = context;
+            const tooltipStore = Alpine.store('chartTooltip');
+            const tooltipEl = document.querySelector('.chart-tooltip');
+
+            if (!tooltipEl) return;
+
+            if (tooltip.opacity === 0) {
+                tooltipStore.show = false;
+                return;
+            }
+
+            // temporarily show offscreen to measure natural size
+            tooltipEl.style.display = 'block';
+            tooltipEl.style.left = '-9999px';
+            tooltipEl.style.top = '-9999px';
+            tooltipEl.style['max-width'] = '300px'; // prevent stretching
+            tooltipEl.style.width = "max-content";
+
+            const windowRect = {
+                x: window.scrollX,
+                y: window.scrollY,
+                width: window.innerWidth,
+                height: window.innerHeight
+            };
+
+            const canvasRect = chart.canvas.getBoundingClientRect();
+
+            const caretPos = {
+                x: canvasRect.left + tooltip.caretX,
+                y: canvasRect.top + tooltip.caretY
+            };
+
+            // preferred position: centered below point
+            const tooltipRect = {
+                x: caretPos.x - tooltipEl.offsetWidth / 2 + windowRect.x,
+                y: caretPos.y + 10 + windowRect.y,
+                width: tooltipEl.scrollWidth,
+                height: tooltipEl.scrollHeight
+            };
+
+            // flip above if too close to bottom of viewport
+            // clamp left/right inside viewport
+            const adjustedInnerRect = keepRectInsideBounds(flipToolTipToTop(caretPos, tooltipRect, windowRect, 15), windowRect, 15);
+
+            tooltipEl.style.left = `${adjustedInnerRect.x}px`;
+            tooltipEl.style.top = `${adjustedInnerRect.y}px`;
+
+            // pass data
+            tooltipStore.data = tooltip.dataPoints.map(dp => dp.raw);
+            tooltipStore.show = true;
+        }
+        
+        function flipToolTipToTop(caretPos, tooltipRect, bounds, margin) {
+            margin = margin || 0;
+
+            const adjustedRect = {};
+
+            adjustedRect.x = tooltipRect.x;
+            adjustedRect.y = tooltipRect.y;
+            adjustedRect.width = tooltipRect.width;
+            adjustedRect.height = tooltipRect.height;
+
+            if (adjustedRect.y + adjustedRect.height > bounds.y + bounds.height - margin) {
+                adjustedRect.y = caretPos.y - adjustedRect.height - 10 + bounds.y;
+            }
+
+            return adjustedRect;
+        }
+
+        function keepRectInsideBounds(innerRect, bounds, margin) {
+            margin = margin || 0;
+            
+            const adjustedRect = {};
+
+            adjustedRect.x = constrain(innerRect.x, bounds.x + margin, bounds.x + bounds.width - innerRect.width - margin);
+            adjustedRect.y = constrain(innerRect.y, bounds.y + margin, bounds.y + bounds.height - innerRect.height - margin);
+            adjustedRect.width = innerRect.width;
+            adjustedRect.height = innerRect.height;
+
+            return adjustedRect;
+        }
+
+        function constrain(x, lowBound, highBound) {
+            x = Math.max(x, lowBound);
+            x = Math.min(x, highBound);
+            return x;
+        }
+
+        document.addEventListener('alpine:init', () => {
+            Alpine.store('chartTooltip', {
+                show: false,
+                x: 0,
+                y: 0,
+                data: []
+            });
+        });
+        
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('vistaChart', () => ({
+                hideCompleted: localStorage.getItem('hideCompleted') === 'true',
+                init() {
+                    // watch hideCompleted toggle
+                    this.$watch('hideCompleted', (val) => {
+                        localStorage.setItem('hideCompleted', val);
+
+                        const filtered = val ? Vista.filter(v => !v.completed) : Vista;
+
+                        const vistaData = buildVistaGraphDataForRange(
+                            filtered,
+                            startUnixSeconds,
+                            endUnixSeconds
+                        );
+
+                        myChart.data.datasets[0].data = vistaData;
+                        myChart.options.scales.y.max = filtered.length;
+                        myChart.options.scales.y.labels = filtered.map(v => `${v.name}: #${v.number}`);
+                        myChart.update();
+                        // plugin afterRender will automatically rebuild checkboxes
+                    });
+                }
+            }));
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const hideCompletedCheckbox = document.getElementById('hideCompleted');
+            if (!hideCompletedCheckbox) return;
+
+            function rebuildChart() {
+                const hideCompleted = document.getElementById('hideCompleted').checked;
+                const filtered = hideCompleted ? Vista.filter(v => !v.completed) : Vista;
+
+                myChart.filteredVistas = filtered;
+
+                // rebuild dataset
+                const vistaData = buildVistaGraphDataForRange(filtered, startUnixSeconds, endUnixSeconds);
+                myChart.data.datasets[0].data = vistaData;
+
+                // rebuild y-axis
+                myChart.options.scales.y.max = filtered.length;
+                myChart.options.scales.y.labels = filtered.map(v => `${v.name}: #${v.number}`);
+                myChart.update();
+            }
+
+            // initial render
+            rebuildChart();
+
+            // handle hideCompleted toggle
+            hideCompletedCheckbox.addEventListener('change', rebuildChart);
+        });
+    </script>
 </body>
 </html>
