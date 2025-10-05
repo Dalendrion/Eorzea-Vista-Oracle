@@ -194,7 +194,8 @@
 
                                     <dt class="col-sm-3 text-end"><span class="badge text-bg-secondary" data-bs-toggle="tooltip" data-bs-title="Eorzea Time">ET</span></dt>
                                     <dd class="col-sm-9">
-                                        <span x-text="point.eorzeaTime[0]"></span> - <span x-text="point.eorzeaTime[1]"></span>
+                                        <span x-text="formatEorzeanTime(new Date(point.x[0]).getTime() / 1000)"></span> -
+                                        <span x-text="formatEorzeanTime(new Date(point.x[1]).getTime() / 1000)"></span>
                                     </dd>
 
                                     <dt class="col-sm-3 text-end"><span class="badge text-bg-secondary" data-bs-toggle="tooltip" data-bs-title="Local Time">LT</span></dt>
@@ -221,8 +222,12 @@
         });
     </script>
     <script id="init-chart-js">
-        const startUnixSeconds = new Date().getTime() / 1000;
-        const endUnixSeconds = startUnixSeconds + 3 * 60 * 60; // + 6 hours...
+        const startUnixSeconds = Math.floor(new Date().getTime() / 1000 / SECONDS_PER_WEATHER_WINDOW) * SECONDS_PER_WEATHER_WINDOW;
+        const endUnixSeconds = startUnixSeconds + 9 * SECONDS_PER_WEATHER_WINDOW;
+
+        
+        // min: new Date(Math.floor(startUnixSeconds / SECONDS_PER_WEATHER_WINDOW) * SECONDS_PER_WEATHER_WINDOW * 1000),
+        // max: new Date(Math.ceil(endUnixSeconds / SECONDS_PER_WEATHER_WINDOW) * SECONDS_PER_WEATHER_WINDOW * 1000),
 
         const vistasForGraph = Vista;
         const vistaData = buildVistaGraphDataForRange(vistasForGraph, startUnixSeconds, endUnixSeconds);
@@ -358,15 +363,56 @@
                 indexAxis: 'y',
                 scales: {
                     x: {
-                    position: 'top',
-                    type: 'time',
-                    time: {
-                        displayFormats: {
-                            day: 'd'
+                        type: 'time',
+                        position: 'top',
+
+                        // Align min to a whole Eorzean hour
+                        min: new Date(Math.floor(startUnixSeconds / SECONDS_PER_WEATHER_WINDOW) * SECONDS_PER_WEATHER_WINDOW * 1000),
+                        max: new Date(Math.ceil(endUnixSeconds / SECONDS_PER_WEATHER_WINDOW) * SECONDS_PER_WEATHER_WINDOW * 1000),
+
+                        time: {
+                            unit: 'hour',
+                            stepSize: 1,
+                            displayFormats: {
+                                hour: 'HH'
+                            }
                         },
-                    },
-                    min: new Date(startUnixSeconds * 1000),
-                    max: new Date(endUnixSeconds * 1000),
+
+                        ticks: {
+                            minRotation: 0,
+                            maxRotation: 0,
+                            callback: function(value, index, ticks) {
+                                const tick = ticks[index];
+                                if (tick && tick.major) {
+                                    const seconds = value / 1000;
+                                    return [formatLocalTime(seconds) + ' LT', formatEorzeanTime(seconds) + ' ET'];
+                                }
+                                return '';
+                            }
+                        },
+
+                        afterBuildTicks(scale) {
+                            const ticks = [];
+                            // Align start to the nearest full Eorzean hour
+                            const alignedStart = Math.floor(startUnixSeconds / SECONDS_PER_EORZEAN_HOUR) * SECONDS_PER_EORZEAN_HOUR;
+                            const alignedEnd = Math.ceil(endUnixSeconds / SECONDS_PER_EORZEAN_HOUR) * SECONDS_PER_EORZEAN_HOUR;
+
+                            for (let t = alignedStart; t <= alignedEnd; t += SECONDS_PER_EORZEAN_HOUR) {
+                                ticks.push({
+                                    value: t * 1000,
+                                    major: (t / SECONDS_PER_EORZEAN_HOUR) % EORZEAN_HOURS_PER_WEATHER_WINDOW === 0
+                                });
+                            }
+
+                            scale.ticks = ticks;
+                        },
+
+                        grid: {
+                            color: 'rgba(200,200,200,1)',
+                            lineWidth: function(context) {
+                                return context.tick && context.tick.major ? 1.5 : 0.7;
+                            }
+                        }
                     },
                     y: {
                         ticks: {
