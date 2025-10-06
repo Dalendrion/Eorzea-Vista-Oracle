@@ -46,8 +46,34 @@
             return true;
         },
         hideCompletedVistas: false,
+        chartTimer: null,
+        init() {
+            setInterval(() => { this.updateTimes() }, 1000);
+
+            this.$nextTick(() => {
+                this.chartTimer = setInterval(() => {
+                    const now = Date.now() / 1000;
+                    if (window.myChart) {
+                        // Find the dataset representing the Now line
+                        const nowDataset = window.myChart.data.datasets.find(d => d.label === 'Now');
+                        if (nowDataset) {
+                            // Update its X values to the new time
+                            nowDataset.data = [
+                                { x: now, y: 0 },
+                                { x: now, y: 1 },
+                            ];
+                        }
+                        window.myChart.update('none');
+                    }
+                }, 1000);
+            });
+        },
+        destroy() {
+            if (this.chartTimer) clearInterval(this.chartTimer);
+        }
     }"
-    x-init="setInterval(() => { updateTimes() }, 1000)">
+    x-init="init()"
+    x-on:beforeunload.window="destroy()">
         
         <div class="container">
             <h1>Welcome to the Eorzea Vista Oracle</h1>
@@ -477,6 +503,7 @@
             document.getElementById('myChart'),
             config
         );
+        window.myChart = myChart;
 
         function externalTooltipHandler(context) {
             const { chart, tooltip } = context;
