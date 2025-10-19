@@ -27,9 +27,14 @@
         windowShifts: 0,
         shiftWindow(delta) {
             this.windowShifts += delta;
+            // keep chart state in sync directly (avoid CustomEvent)
+            window.currentWindowShifts = this.windowShifts;
+            window.rebuildChart();
         },
         resetShiftWindow() {
             this.windowShifts = 0;
+            window.currentWindowShifts = this.windowShifts;
+            window.rebuildChart();
         },
         regions: Object.values(window.Region),
         selectedRegions: [],
@@ -54,15 +59,6 @@
                 this.chartTimer = setInterval(() => {
                     const now = Date.now() / 1000;
                     if (window.myChart) {
-                        // Find the dataset representing the Now line
-                        const nowDataset = window.myChart.data.datasets.find(d => d.label === 'Now');
-                        if (nowDataset) {
-                            // Update its X values to the new time
-                            nowDataset.data = [
-                                { x: now, y: 0 },
-                                { x: now, y: 1 },
-                            ];
-                        }
                         window.myChart.update('none');
                     }
                 }, 1000);
@@ -181,11 +177,30 @@
     
                     <div class="chartBox">
                         <div class="chart-container" style="position: relative; height: 2000px;">
-                            <div class="form-check mb-2" x-data="vistaChart">
-                                <input class="form-check-input" type="checkbox" id="hideCompleted" x-model="hideCompleted">
-                                <label class="form-check-label" for="hideCompleted">
-                                    Hide Completed Vistas
-                                </label>
+                            <div class="row mb-2">
+                                <div class="col-auto" x-data="vistaChart">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="hideCompleted" x-model="hideCompleted">
+                                        <label class="form-check-label" for="hideCompleted">
+                                            Hide Completed Vistas
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <div class="btn-group" role="group">
+                                            <button type="button" @click="shiftWindow(-1)" class="btn btn-light" data-bs-toggle="tooltip" title="Move back in time">
+                                                <i class="bi bi-caret-left-fill"></i>
+                                            </button>
+                                            <button type="button" @click="resetShiftWindow()" class="btn btn-light" data-bs-toggle="tooltip" title="Reset to current time">
+                                                <i class="bi bi-arrow-counterclockwise"></i>
+                                            </button>
+                                            <button type="button" @click="shiftWindow(1)" class="btn btn-light" data-bs-toggle="tooltip" title="Move forward in time">
+                                                <i class="bi bi-caret-right-fill"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <canvas id="myChart"></canvas>
                             <div id="vistaCheckboxesOverlay" style="position:absolute; top:0; left:0; pointer-events:none;"></div>
@@ -255,8 +270,22 @@
         });
     </script>
     <script id="init-chart-js">
-        const startUnixSeconds = Math.floor(new Date().getTime() / 1000 / SECONDS_PER_WEATHER_WINDOW) * SECONDS_PER_WEATHER_WINDOW;
-        const endUnixSeconds = startUnixSeconds + 9 * SECONDS_PER_WEATHER_WINDOW;
+        // Chart range calculation helper - base start aligned to weather window
+        function getBaseChartStart() {
+            return Math.floor(new Date().getTime() / 1000 / SECONDS_PER_WEATHER_WINDOW) * SECONDS_PER_WEATHER_WINDOW;
+        }
+
+        function getChartRange(windowShifts = 0) {
+            const start = getBaseChartStart() + windowShifts * SECONDS_PER_WEATHER_WINDOW;
+            const end = start + 9 * SECONDS_PER_WEATHER_WINDOW;
+            return { start, end };
+        }
+
+        // initial start/end
+    // prefer a global window.currentWindowShifts set by Alpine; fall back to a local variable
+    window.currentWindowShifts = window.currentWindowShifts || 0;
+    let currentWindowShifts = window.currentWindowShifts;
+    let { startUnixSeconds, endUnixSeconds } = (function(){ const r = getChartRange(currentWindowShifts); return { startUnixSeconds: r.start, endUnixSeconds: r.end }; })();
 
         // restore completed statues
         const savedCompleted = localStorage.getItem('vistaCompleted');
@@ -637,17 +666,28 @@
                 const hideCompleted = document.getElementById('hideCompleted').checked;
                 const filtered = hideCompleted ? Vista.filter(v => !v.completed) : Vista;
 
+                // update global filtered reference for plugin
                 myChart.filteredVistas = filtered;
 
+                // ensure we compute current range from window shifts
+                // always read the authoritative shift value from window (Alpine writes it)
+                currentWindowShifts = window.currentWindowShifts || currentWindowShifts;
+                const range = getChartRange(currentWindowShifts);
+
                 // rebuild dataset
-                const vistaData = buildVistaGraphDataForRange(filtered, startUnixSeconds, endUnixSeconds);
+                const vistaData = buildVistaGraphDataForRange(filtered, range.start, range.end);
                 myChart.data.datasets[0].data = vistaData;
 
                 // rebuild y-axis
                 myChart.options.scales.y.max = filtered.length;
                 myChart.options.scales.y.labels = filtered.map(v => `${v.name}: #${v.number}`);
+                myChart.options.scales.x.min = new Date(range.start * 1000);
+                myChart.options.scales.x.max = new Date(range.end * 1000);
                 myChart.update();
             }
+
+            // make available globally
+            window.rebuildChart = rebuildChart;
 
             // initial render
             rebuildChart();

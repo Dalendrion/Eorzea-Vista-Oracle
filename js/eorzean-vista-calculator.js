@@ -207,6 +207,13 @@ function isVistaWeatherConditionMet(unixSeconds, vista) {
  * @returns {VistaGraphData[]} Chart.js compatible datasets object.
  */
 function buildVistaGraphDataForRange(vistas, startUnixSeconds, endUnixSeconds) {
+    // If start/end are not provided, default to a sensible current range
+    if (startUnixSeconds === undefined || endUnixSeconds === undefined) {
+        const baseStart = Math.floor(Date.now() / 1000 / SECONDS_PER_WEATHER_WINDOW) * SECONDS_PER_WEATHER_WINDOW;
+        startUnixSeconds = baseStart;
+        endUnixSeconds = baseStart + 9 * SECONDS_PER_WEATHER_WINDOW;
+    }
+
     const data = [];
 
     vistas.forEach(vista => {
@@ -240,6 +247,15 @@ function buildVistaGraphDataForRange(vistas, startUnixSeconds, endUnixSeconds) {
 }
 
 /**
+ * Convenience wrapper that builds graph data for the default/current chart range.
+ * Keeps callers simple: buildVistaGraphData(Vista) will use a 10-window default range.
+ */
+function buildVistaGraphData(vistas) {
+    const baseStart = Math.floor(Date.now() / 1000 / SECONDS_PER_WEATHER_WINDOW) * SECONDS_PER_WEATHER_WINDOW;
+    return buildVistaGraphDataForRange(vistas, baseStart, baseStart + 9 * SECONDS_PER_WEATHER_WINDOW);
+}
+
+/**
  * Chart.js compatible dataset
  */
 class VistaGraphData {
@@ -260,3 +276,5 @@ class VistaGraphData {
 
 window.getWeatherForecast = getWeatherForecast
 window.getZonesByRegion = getZonesByRegion
+window.buildVistaGraphDataForRange = buildVistaGraphDataForRange
+window.buildVistaGraphData = buildVistaGraphData
