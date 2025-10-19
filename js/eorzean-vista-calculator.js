@@ -1,16 +1,18 @@
 /**
  * Returns an array of weather window start times (in unix seconds).
- * @param {number} unixSeconds - The current time in unix seconds.
- * @param {number} numberOfWindows - The number of weather windows to return.
+ * @param {number} unixSeconds The current time in unix seconds.
+ * @param {number} numberOfWindows The number of weather windows to return.
  * @returns {number[]} Array of window start times.
  */
 function getWeatherWindowStarts(unixSeconds, numberOfWindows) {
-    let starts = [];
+    const starts = [];
     let start = getWeatherWindowStart(unixSeconds);
+
     for (let i = 0; i < numberOfWindows; i++) {
         starts.push(start);
         start = getNextWeatherWindowStart(start);
     }
+
     return starts;
 }
 
@@ -21,25 +23,46 @@ const HOURS_PER_DAY = 24;
 const SECONDS_PER_EORZEAN_DAY = SECONDS_PER_EORZEAN_HOUR * HOURS_PER_DAY; // 24 Eorzean hours = 1 Eorzean day
 
 function padZero(num) {
-    return (num < 10 ? "0" : "") + num;
+    return (num < 10 ? '0' : '') + num;
 }
 
 function formatDate(unixSeconds, pattern) {
     const d = new Date(unixSeconds * 1000);
-    
+
     const monthNames = [
-        "January", "February", "March", "April",
-        "May", "June", "July", "August",
-        "September", "October", "November", "December"
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December'
     ];
+
     const monthShortNames = [
-        "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug",
-        "Sep", "Oct", "Nov", "Dec"
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec'
     ];
+
     const monthName = monthNames[d.getMonth()];
     const monthShortName = monthShortNames[d.getMonth()];
     const month = d.getMonth() + 1;
-    
+
     const replacements = {
         YYYY: d.getFullYear(),
         MM: padZero(month),
@@ -51,7 +74,7 @@ function formatDate(unixSeconds, pattern) {
         ss: padZero(d.getSeconds())
     };
 
-    for (let key in replacements) {
+    for (const key in replacements) {
         pattern = pattern.replace(key, replacements[key]);
     }
 
@@ -59,48 +82,55 @@ function formatDate(unixSeconds, pattern) {
 }
 
 function formatLocalTime(unixSeconds) {
-    return formatDate(unixSeconds, "HH:mm");
+    return formatDate(unixSeconds, 'HH:mm');
 }
 
 function formatEorzeanTime(unixSeconds) {
-    // Seconds into the current Eorzean day
+    // Seconds into the current Eorzean day.
     const secondsInEorzeanDay = unixSeconds % SECONDS_PER_EORZEAN_DAY;
 
-    // Compute Eorzean hour and minute
+    // Compute Eorzean hour and minute.
     const eorzeanHours = Math.floor(secondsInEorzeanDay / SECONDS_PER_EORZEAN_HOUR);
     const eorzeanMinutes = Math.floor(((secondsInEorzeanDay % SECONDS_PER_EORZEAN_HOUR) / SECONDS_PER_EORZEAN_HOUR) * 60);
 
-    return padZero(eorzeanHours) + ":" + padZero(eorzeanMinutes);
+    return padZero(eorzeanHours) + ':' + padZero(eorzeanMinutes);
 }
 
 function forecastTarget(table, unixSeconds) {
-    // Canonical FFXIV weather calculation algorithm (matches C# logic)
+    // Canonical FFXIV weather calculation algorithm (matches C# logic).
     let chanceSum = 0;
+
     for (let i = 0; i < table.length; i++) {
         chanceSum += table[i].chance;
     }
+
     const windowStart = getWeatherWindowStart(unixSeconds);
     const bell = Math.floor(windowStart / SECONDS_PER_EORZEAN_HOUR);
     const increment = (bell + 8 - (bell % 8)) % HOURS_PER_DAY;
     const totalDays = Math.floor(windowStart / SECONDS_PER_EORZEAN_DAY);
-    const calcBase = (totalDays * 100) + increment;
+    const calcBase = totalDays * 100 + increment;
     const step1 = ((calcBase << 11) ^ calcBase) >>> 0;
     const step2 = ((step1 >>> 8) ^ step1) >>> 0;
+
     return step2 % chanceSum;
 }
 
 function getWeather(areaName, unixSeconds) {
     const table = weatherTables[areaName];
-    const forecast = forecastTarget(table, unixSeconds);
+
     if (!table) {
-        return "Unknown zone";
+        return 'Unknown zone';
     }
+
+    const forecast = forecastTarget(table, unixSeconds);
+
     for (let i = 0; i < table.length; i++) {
         if (forecast < table[i].threshold) {
             return table[i].name;
         }
     }
-    return "???";
+
+    return '???';
 }
 
 function getWeatherWindowStart(unixSeconds) {
@@ -120,31 +150,32 @@ function getNextEorzeanHourStart(unixSeconds) {
 }
 
 function getWeatherObject(weather) {
-    // Remove HTML entities (like &shy;) for image path
-    const weatherForImage = weather.replace(/&[^;]+;/g, "");
+    // Remove HTML entities (like &shy;) for image path.
+    const weatherForImage = weather.replace(/&[^;]+;/g, '');
+
     return {
         name: weather,
-        icon: `img/weather/${weatherForImage.replace(/ /g, "_")}_icon.png`
+        icon: `img/weather/${weatherForImage.replace(/ /g, '_')}_icon.png`
     };
 }
 
 /**
- * Calculates the weather forecast for an areas at a given time.
- * 
+ * Calculates the weather forecast for an area at a given time.
+ *
  * The result looks like this:
- * ```
- * forecast: {
- *     weather: "Clear Skies",
- *     icon: "img/weather/Clear_Skies_icon.png",
+ * {
+ *   weather: 'Clear Skies',
+ *   icon: 'img/weather/Clear_Skies_icon.png'
  * }
- * ```
- * @param areaName Area name, e.g. "Limsa Lominsa" or "Gridania"
- * @param unixSeconds Time in unix seconds
- * @returns the weather forecast for the specified area and time
+ *
+ * @param {string} areaName Area name, e.g. 'Limsa Lominsa' or 'Gridania'.
+ * @param {number} unixSeconds Time in unix seconds.
+ * @returns {{name: string, icon: string}} The weather forecast.
  */
 function getWeatherForecast(areaName, unixSeconds) {
     const windowStart = getWeatherWindowStart(unixSeconds);
     const weather = getWeather(areaName, windowStart);
+
     return getWeatherObject(weather);
 }
 
@@ -156,8 +187,9 @@ function getEmoteObject(emoteName) {
 }
 
 /**
- * Get all zones in the given regions.
- * @param {string} region - The name of a region (e.g., Region.COERTHAS or Region.DRAVANIA).
+ * Get all zones in the given region.
+ *
+ * @param {string} region The name of a region (e.g., Region.COERTHAS).
  * @returns {object[]} List of matching Zone objects.
  */
 function getZonesByRegion(region) {
@@ -166,7 +198,8 @@ function getZonesByRegion(region) {
 
 /**
  * Get all zones introduced in the given expansions.
- * @param {string[]} expansions - List of expansion constants (e.g., [Expansion.HEAVENSWARD, Expansion.STORMBLOOD]).
+ *
+ * @param {string[]} expansions List of expansion constants (e.g., [Expansion.HEAVENSWARD]).
  * @returns {object[]} List of matching Zone objects.
  */
 function getZonesByExpansions(expansions) {
@@ -181,10 +214,11 @@ function isVistaTimeConditionMet(unixSeconds, vista) {
     let eorzeanHour = getEorzeanHour(unixSeconds);
     let start = vista.time.from;
     let end = vista.time.until;
-    
+
     if (end < start) {
         end += HOURS_PER_DAY;
     }
+
     if (eorzeanHour < start) {
         eorzeanHour += HOURS_PER_DAY;
     }
@@ -194,20 +228,21 @@ function isVistaTimeConditionMet(unixSeconds, vista) {
 
 function isVistaWeatherConditionMet(unixSeconds, vista) {
     const forecast = getWeatherForecast(vista.zone.name, unixSeconds);
+
     return vista.weather.includes(forecast.name);
 }
 
 /**
- * Builds chart-ready data from Vista definitions and weather tables for a given time range.
- * Adjacent windows are merged.
- * 
- * @param {object[]} vistas - Array of Vista objects.
- * @param {number} startUnixSeconds - Start of the time range to calculate data for.
- * @param {number} endUnixSeconds - End of the time range to calculate data for.
+ * Builds chart-ready data from Vista definitions and weather tables for a given
+ * time range. Adjacent windows are merged.
+ *
+ * @param {object[]} vistas Array of Vista objects.
+ * @param {number} startUnixSeconds Start of the time range to calculate data for.
+ * @param {number} endUnixSeconds End of the time range to calculate data for.
  * @returns {VistaGraphData[]} Chart.js compatible datasets object.
  */
 function buildVistaGraphDataForRange(vistas, startUnixSeconds, endUnixSeconds) {
-    // If start/end are not provided, default to a sensible current range
+    // If start/end are not provided, default to a sensible current range.
     if (startUnixSeconds === undefined || endUnixSeconds === undefined) {
         const baseStart = Math.floor(Date.now() / 1000 / SECONDS_PER_WEATHER_WINDOW) * SECONDS_PER_WEATHER_WINDOW;
         startUnixSeconds = baseStart;
@@ -220,19 +255,21 @@ function buildVistaGraphDataForRange(vistas, startUnixSeconds, endUnixSeconds) {
         const mergedWindows = [];
 
         let windowStart = getEorzeanHourStart(startUnixSeconds);
+
         while (windowStart < endUnixSeconds) {
             const windowEnd = getNextEorzeanHourStart(windowStart);
             const windowStartDate = new Date(windowStart * 1000);
             const windowEndDate = new Date(windowEnd * 1000);
 
             if (isVistaTimeConditionMet(windowStart, vista) && isVistaWeatherConditionMet(windowStart, vista)) {
-                // Create a timeslot for this Vista
+                // Create a timeslot for this Vista.
                 const lastMerged = mergedWindows[mergedWindows.length - 1];
+
                 if (lastMerged && lastMerged.x[1].getTime() === windowStartDate.getTime()) {
-                    // Merge with previous block if consecutive
+                    // Merge with previous block if consecutive.
                     lastMerged.x[1] = windowEndDate;
                 } else {
-                    // New timeslot
+                    // New timeslot.
                     mergedWindows.push(new VistaGraphData(vista, windowStartDate, windowEndDate));
                 }
             }
@@ -248,10 +285,15 @@ function buildVistaGraphDataForRange(vistas, startUnixSeconds, endUnixSeconds) {
 
 /**
  * Convenience wrapper that builds graph data for the default/current chart range.
- * Keeps callers simple: buildVistaGraphData(Vista) will use a 10-window default range.
+ * Keeps callers simple: buildVistaGraphData(Vista) will use a 10-window default
+ * range.
+ *
+ * @param {object[]} vistas Array of Vista objects.
+ * @returns {VistaGraphData[]}
  */
 function buildVistaGraphData(vistas) {
     const baseStart = Math.floor(Date.now() / 1000 / SECONDS_PER_WEATHER_WINDOW) * SECONDS_PER_WEATHER_WINDOW;
+
     return buildVistaGraphDataForRange(vistas, baseStart, baseStart + 9 * SECONDS_PER_WEATHER_WINDOW);
 }
 
@@ -261,20 +303,17 @@ function buildVistaGraphData(vistas) {
 class VistaGraphData {
     constructor(vista, localTimeStart, localTimeEnd) {
         this.number = vista.number;
-        this.eorzeaTime = [
-            padZero(vista.time.from) + ":00",
-            padZero(vista.time.until) + ":00"
-        ];
-        this.x = [localTimeStart, localTimeEnd ];
+        this.eorzeaTime = [padZero(vista.time.from) + ':00', padZero(vista.time.until) + ':00'];
+        this.x = [localTimeStart, localTimeEnd];
         this.y = `${vista.name}: #${vista.number}`;
-        this.weather = vista.weather.map(w => getWeatherObject(w))
-        this.emote = getEmoteObject(vista.emote),
-        this.zone = vista.zone,
-        this.location = vista.coordinates
+        this.weather = vista.weather.map(w => getWeatherObject(w));
+        this.emote = getEmoteObject(vista.emote);
+        this.zone = vista.zone;
+        this.location = vista.coordinates;
     }
 }
 
-window.getWeatherForecast = getWeatherForecast
-window.getZonesByRegion = getZonesByRegion
-window.buildVistaGraphDataForRange = buildVistaGraphDataForRange
-window.buildVistaGraphData = buildVistaGraphData
+window.getWeatherForecast = getWeatherForecast;
+window.getZonesByRegion = getZonesByRegion;
+window.buildVistaGraphDataForRange = buildVistaGraphDataForRange;
+window.buildVistaGraphData = buildVistaGraphData;

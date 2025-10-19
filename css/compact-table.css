@@ -1,9 +1,10 @@
-/* Allow long weather names to break naturally */
+/* Allow long weather names to break naturally. */
 .break-word {
   word-break: break-word;
   overflow-wrap: break-word;
 }
-/* Fixed width for weather columns (not the first column) */
+
+/* Fixed width for weather columns (not the first column). */
 .fixed-col {
   width: 100px;
   max-width: 100px;
