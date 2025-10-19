@@ -298,10 +298,16 @@
             });
         }
 
-        const vistasForGraph = Vista;
+        // Determine initial filtered list from saved hideCompleted setting so the
+        // chart is created with the correct categories on first render.
+        const initialHideCompleted = localStorage.getItem('hideCompleted') === 'true';
+        const vistasForGraph = initialHideCompleted ? Vista.filter(v => !v.completed) : Vista;
         const vistaData = buildVistaGraphDataForRange(vistasForGraph, startUnixSeconds, endUnixSeconds);
-        
+
+        // initial container size is now handled by the heightAdjustPlugin after layout
+
         const data = {
+            labels: vistasForGraph.map(v => `${v.name}: #${v.number}`),
             datasets: [{
                 label: 'Vistas',
                 data: vistaData,
@@ -342,43 +348,43 @@
                 overlay.style.left = chart.canvas.offsetLeft + 'px';
                 overlay.innerHTML = ''; // clear previous checkboxes
 
-                const yScale = chart.scales.y;
-                const tickCount = yScale.ticks.length;
+                const labels = chart.data && chart.data.labels ? chart.data.labels : [];
                 const filtered = chart.filteredVistas || Vista;
+                const yScale = chart.scales && chart.scales.y;
+                const leftPos = (yScale && typeof yScale.right === 'number') ? (yScale.right - 25) : (chart.chartArea.right - 25);
 
-                for (let i = 0; i < tickCount; i++) {
-                    const vista = filtered[i];
-                    const tick = yScale.ticks[i];
-                    tick.vistaNumber = vista.number; // store the original vista number
-                    const y = yScale.getPixelForTick(i);
+                for (let i = 0; i < labels.length; i++) {
+                    const labelText = labels[i];
+                    const originalVista = filtered.find(v => `${v.name}: #${v.number}` === labelText) || Vista.find(v => `${v.name}: #${v.number}` === labelText) || null;
+
+                    let y;
+                    try {
+                        y = yScale.getPixelForValue(labelText);
+                    } catch (e) {
+                        const tick = yScale.ticks && yScale.ticks[i];
+                        y = tick ? yScale.getPixelForTick(i) : (chart.chartArea.top + chart.chartArea.bottom) / 2;
+                    }
 
                     const wrapper = document.createElement('div');
                     wrapper.className = 'form-check';
                     wrapper.style.position = 'absolute';
                     wrapper.style.pointerEvents = 'auto';
-                    wrapper.style.left = (yScale.right - 25) + 'px';
+                    wrapper.style.left = leftPos + 'px';
                     wrapper.style.top = (y - 12) + 'px';
 
                     const checkbox = document.createElement('input');
                     checkbox.className = 'form-check-input';
                     checkbox.type = 'checkbox';
-                    checkbox.id = `vistaCheckbox-${tick.vistaNumber}`;
-                    checkbox.value = tick.vistaNumber;
+                    const vistaNum = originalVista ? originalVista.number : `unknown-${i}`;
+                    checkbox.id = `vistaCheckbox-${vistaNum}`;
+                    checkbox.value = vistaNum;
+                    checkbox.checked = originalVista ? originalVista.completed : false;
 
-                    // set initial checked state from the original Vista array
-                    const originalVista = Vista.find(v => v.number === tick.vistaNumber);
-                    checkbox.checked = originalVista?.completed || false;
-
-                    // update Vista.completed on toggle
                     checkbox.addEventListener('change', () => {
                         if (originalVista) originalVista.completed = checkbox.checked;
                         localStorage.setItem('vistaCompleted', JSON.stringify(Vista.map(v => v.completed)));
-
-                        // rebuild chart if hiding completed
                         const hideCompleted = document.getElementById('hideCompleted').checked;
-                        if (hideCompleted) {
-                            rebuildChart(); // chart updates, plugin will rerun beforeDraw
-                        }
+                        if (hideCompleted) rebuildChart();
                     });
 
                     wrapper.appendChild(checkbox);
@@ -433,6 +439,54 @@
                 ctx.setLineDash([5, 5]);
                 ctx.stroke();
                 ctx.restore();
+            }
+        };
+
+        // height adjust plugin: run after layout to compute exact container height
+        const heightAdjustPlugin = {
+            id: 'heightAdjustPlugin',
+            afterLayout(chart, args, options) {
+                // skip if nothing requested or if we're already adjusting
+                if (!chart._needsHeightAdjust || chart._heightAdjusting) return;
+
+                const chartContainer = chart.canvas && chart.canvas.parentNode;
+                if (!chartContainer) {
+                    chart._needsHeightAdjust = false;
+                    return;
+                }
+
+                const labels = chart.data && chart.data.labels ? chart.data.labels : [];
+                const count = Math.max(1, labels.length);
+                const perVista = (options && options.perVista) ? options.perVista : 20;
+                const minHeight = (options && options.minHeight) ? options.minHeight : 60;
+                const maxHeight = (options && options.maxHeight) ? options.maxHeight : 1600;
+
+                const areaHeight = (chart && chart.chartArea && chart.chartArea.height) ? chart.chartArea.height : null;
+                if (!areaHeight || isNaN(areaHeight)) {
+                    // nothing to do now
+                    return;
+                }
+
+                const overhead = Math.max(0, chartContainer.clientHeight - areaHeight);
+                const desired = Math.round(perVista * count + overhead);
+                const final = Math.max(minHeight, Math.min(maxHeight, desired));
+
+                // only resize if the computed size differs meaningfully
+                const current = parseInt((chartContainer.style.height || '').replace('px','')) || chartContainer.clientHeight;
+                if (Math.abs(current - final) > 1) {
+                    chart._heightAdjusting = true;
+                    chartContainer.style.height = final + 'px';
+                    // trigger Chart.js resize to apply the new canvas size
+                    try {
+                        chart.resize();
+                    } catch (e) {
+                        // ignore
+                    }
+                    chart._heightAdjusting = false;
+                }
+
+                // we've handled the adjustment for this label set
+                chart._needsHeightAdjust = false;
             }
         };
 
@@ -503,11 +557,13 @@
                     },
                     y: {
                         ticks: {
-                            padding: 25
+                            padding: 25,
+                            autoSkip: false,
+                            minRotation: 0,
+                            maxRotation: 0
                         },
                         min: 0,
-                        max: Vista.length,
-                        labels: Vista.map(v => `${v.name}: #${v.number}`),
+                        max: Vista.length
                     }
                 },
                 plugins: {
@@ -522,9 +578,16 @@
                         position: 'nearest',
                         external: externalTooltipHandler,
                     }
+                    ,
+                    // options for the height adjust plugin
+                    heightAdjustPlugin: {
+                        perVista: 20,
+                        minHeight: 60,
+                        maxHeight: 1600
+                    }
                 }
             },
-            plugins: [currentTimeMarker, vistaCheckboxPlugin]
+            plugins: [currentTimeMarker, vistaCheckboxPlugin, heightAdjustPlugin]
         };
 
         // render init block
@@ -533,6 +596,8 @@
             config
         );
         window.myChart = myChart;
+        // request a height adjustment after initial layout
+        myChart._needsHeightAdjust = true;
 
         function externalTooltipHandler(context) {
             const { chart, tooltip } = context;
@@ -650,7 +715,6 @@
 
                         myChart.data.datasets[0].data = vistaData;
                         myChart.options.scales.y.max = filtered.length;
-                        myChart.options.scales.y.labels = filtered.map(v => `${v.name}: #${v.number}`);
                         myChart.update();
                         // plugin afterRender will automatically rebuild checkboxes
                     });
@@ -670,7 +734,6 @@
                 myChart.filteredVistas = filtered;
 
                 // ensure we compute current range from window shifts
-                // always read the authoritative shift value from window (Alpine writes it)
                 currentWindowShifts = window.currentWindowShifts || currentWindowShifts;
                 const range = getChartRange(currentWindowShifts);
 
@@ -678,18 +741,22 @@
                 const vistaData = buildVistaGraphDataForRange(filtered, range.start, range.end);
                 myChart.data.datasets[0].data = vistaData;
 
-                // rebuild y-axis
+                // rebuild y-axis and set chart data labels so ticks are derived from data.labels
                 myChart.options.scales.y.max = filtered.length;
-                myChart.options.scales.y.labels = filtered.map(v => `${v.name}: #${v.number}`);
+                myChart.data.labels = filtered.map(v => `${v.name}: #${v.number}`);
+                // request the heightAdjustPlugin to run after Chart.js completes layout
+                try { myChart._needsHeightAdjust = true; } catch (e) { /* ignore */ }
                 myChart.options.scales.x.min = new Date(range.start * 1000);
                 myChart.options.scales.x.max = new Date(range.end * 1000);
+
+                // update chart normally; the heightAdjustPlugin will resize the container
                 myChart.update();
             }
 
             // make available globally
             window.rebuildChart = rebuildChart;
 
-            // initial render
+            // initial render: plugin will adjust height after layout
             rebuildChart();
 
             // handle hideCompleted toggle
